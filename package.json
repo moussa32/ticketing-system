@@ -6,18 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migration:create": "sequelize-cli migration:create --config lib/database/config/config.cjs --migrations-path lib/database/migrations",
+    "migrate": "sequelize-cli db:migrate --config lib/database/config/config.cjs --migrations-path lib/database/migrations",
+    "migrate:rollback": "sequelize-cli db:migrate:undo --config lib/database/config/config.cjs --migrations-path lib/database/migrations",
+    "migrate:rollback:all": "sequelize-cli db:migrate:undo:all --config lib/database/config/config.cjs --migrations-path lib/database/migrations"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "dotenv": "^17.2.3",
     "next": "16.0.3",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
+    "sequelize-cli": "^6.6.3",
     "tailwindcss": "^4"
   }
 }
