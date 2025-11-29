@@ -13,14 +13,22 @@
     "migrate:rollback:all": "sequelize-cli db:migrate:undo:all --config lib/database/config/config.cjs --migrations-path lib/database/migrations"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/forms": "^0.5.10",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
+    "lucide-react": "^0.555.0",
     "next": "16.0.3",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
