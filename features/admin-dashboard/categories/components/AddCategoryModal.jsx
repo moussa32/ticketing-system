@@ -20,6 +20,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import { getAllUrgencies } from '../actions/categoryActions';
+
 const PRIORITY_OPTIONS = [
   { value: 'low', label: 'Low' },
   { value: 'medium', label: 'Medium' },
@@ -31,29 +33,53 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    priority: 'medium'
+    urgencyId: ''
   });
+  const [urgencies, setUrgencies] = useState([]);
+  const [loadingConfig, setLoadingConfig] = useState(true);
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const urgencyData = await getAllUrgencies();
+        setUrgencies(urgencyData);
+        // Set default urgency if available
+        if (urgencyData.length > 0 && !initialData) {
+            // Default to first option or specific one if logic dictates
+             setFormData(prev => ({ ...prev, urgencyId: urgencyData[0].id.toString() }));
+        }
+      } catch (error) {
+        console.error('Failed to fetch urgencies', error);
+      } finally {
+        setLoadingConfig(false);
+      }
+    };
+    fetchConfig();
+  }, []);
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         name: initialData.name || '',
         description: initialData.description || '',
-        priority: initialData.priority || 'medium'
+        urgencyId: initialData.urgencyId ? initialData.urgencyId.toString() : (urgencies.length > 0 ? urgencies[0].id.toString() : '')
       });
     } else {
-      setFormData({
+      setFormData(prev => ({
         name: '',
         description: '',
-        priority: 'medium'
-      });
+        urgencyId: urgencies.length > 0 ? urgencies[0].id.toString() : ''
+      }));
     }
   }, [initialData, isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await onSave(formData);
+      await onSave({
+        ...formData,
+        urgencyId: parseInt(formData.urgencyId)
+      });
     } catch (error) {
       console.error('Error saving category:', error);
     }
@@ -87,18 +113,19 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="priority">Priority</Label>
+            <Label htmlFor="urgencyId">Urgency</Label>
             <Select
-              value={formData.priority}
-              onValueChange={(value) => setFormData({ ...formData, priority: value })}
+              value={formData.urgencyId}
+              onValueChange={(value) => setFormData({ ...formData, urgencyId: value })}
+              disabled={loadingConfig}
             >
-              <SelectTrigger id="priority">
-                <SelectValue placeholder="Select priority" />
+              <SelectTrigger id="urgencyId">
+                <SelectValue placeholder="Select urgency" />
               </SelectTrigger>
               <SelectContent>
-                {PRIORITY_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                {urgencies.map((option) => (
+                  <SelectItem key={option.id} value={option.id.toString()}>
+                    {option.name}
                   </SelectItem>
                 ))}
               </SelectContent>

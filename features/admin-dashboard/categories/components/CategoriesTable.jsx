@@ -9,24 +9,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2 } from 'lucide-react';
 
-const getPriorityBadge = (priority) => {
+const getUrgencyBadge = (urgencyName) => {
   const styles = {
-    low: 'bg-blue-100 text-blue-700 border-blue-200',
-    medium: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-    high: 'bg-orange-100 text-orange-700 border-orange-200',
-    critical: 'bg-red-100 text-red-700 border-red-200'
-  };
-  
-  const labels = {
-    low: 'Low',
-    medium: 'Medium',
-    high: 'High',
-    critical: 'Critical'
+    'Low': 'bg-blue-100 text-blue-700 border-blue-200',
+    'Medium': 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    'High': 'bg-orange-100 text-orange-700 border-orange-200',
+    'Critical': 'bg-red-100 text-red-700 border-red-200'
   };
   
   return {
-    style: styles[priority] || styles.medium,
-    label: labels[priority] || 'Medium'
+    style: styles[urgencyName] || styles['Medium'],
+    label: urgencyName || 'Medium'
   };
 };
 
@@ -40,7 +33,7 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
               <TableHead className="pl-6">ID</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead>Priority</TableHead>
+              <TableHead>Urgency</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead className="text-right pr-6">Actions</TableHead>
             </TableRow>
@@ -54,7 +47,8 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
               </TableRow>
             ) : (
               categories.map((category) => {
-                const priorityBadge = getPriorityBadge(category.priority);
+                const urgencyName = category.urgency ? category.urgency.name : 'Unknown';
+                const urgencyBadge = getUrgencyBadge(urgencyName);
                 return (
                 <TableRow key={category.id} className="hover:bg-gray-50 border-b border-gray-100 last:border-0">
                   <TableCell className="font-mono text-gray-500 pl-6">
@@ -67,8 +61,8 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
                     {category.description || '-'}
                   </TableCell>
                   <TableCell>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${priorityBadge.style}`}>
-                      {priorityBadge.label}
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${urgencyBadge.style}`}>
+                      {urgencyBadge.label}
                     </span>
                   </TableCell>
                   <TableCell className="text-sm text-gray-500">
