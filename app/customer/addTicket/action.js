@@ -15,7 +15,7 @@ export async function saveTicket(formData) {
             console.log("Saving ticket...", { subject, department, description })
 
             const [catId,urgencyId]=category.split(",");
-            const status="Open";
+            const status="Opened";
             const user_id=1; // Replace with actual user ID from session/auth context
 
             // Handle attachment
@@ -34,11 +34,9 @@ export async function saveTicket(formData) {
       fs.writeFileSync(filePath, buffer);
     }
 
-      console.log("Attachment saved as:", filename);
+    const ticketNo = await addTicket(subject,description,status,department,catId,urgencyId,user_id,filename);
 
-            const ticketNo = await addTicket(subject,description,status,department,catId,urgencyId,user_id,filename);
-
-          return { ok: true, message: `Ticket #${ticketNo} submitted successfully!` };
+     return { ok: true, message: `Ticket #${ticketNo} submitted successfully!` };
 
     }catch (error) {
           return { ok: false, message: "Failed to submit ticket" };
