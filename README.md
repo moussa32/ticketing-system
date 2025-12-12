@@ -36,37 +36,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 
-
-## Functionalites 
-
-### Login & Registeration
-
-- the system has three type of users admin, agent, customer. all of them will be stored in same user entity with the different role types
-
-- each type has its own endpoint, but the have common login/register workflow
-
-- workflow
-    - login 
-            - validate email in user table.
-                - if not, return error the user is not registered yet
-                - if yes, validate password, by encrypting user the password and comparing it with
-                          with stored password by decrypt package
-                            - if yes. generate and return token by jwt package
-                            - if no return error. no valid password
-    - register
-            - validate if no user in the table has same email
-                - if yes. 
-                    - will encrypt the password. then store data in the database
-                    - generate and return new token
-                - if no
-                    - return error, the user has account already
-
-    - middleware.
-        - when the request hits the server.
-            - the middleware will check and decrypt the token.
-                to extract the payload that contains  date, role, id,
-                    middleware should check if the role is required for accessing the function is valid.
-
 **Abdelrahman**
 
 - **Summary of work done**: converted role string values from UPPERCASE to lowercase across the auth flow to match the database ENUM and unify role handling. Updated login/register seed data and adjusted client/server role mappings so redirects and authorization checks use `admin`, `agent`, `customer`.
@@ -190,7 +159,3 @@ graph LR
         - Behavior: Throws if user does not exist.
 
     - `fullbackForgetPassword(params)`
-        - Description: Empty stub in the current codebase for any follow-up forget-password logic (e.g., generate reset token, send email).
-        - Params: `params` — TBD.
-
-    These functions are currently used by the API routes under `app/api/auth/*` and by middleware that verifies tokens and role-based access. If you'd like, I can also add example request/response snippets for `POST /api/auth/login` and `POST /api/auth/register` to this README.
