@@ -3,16 +3,10 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/useAuth';
-import AdminNavbar from "@/components/AdminNavbar";
-import AdminSidebar from "@/components/AdminSidebar";
 
-const ROLES = {
-  ADMIN: 'ADMIN',
-};
-
-export default function AdminLayout({ children }) {
+export default function ProfileLayout({ children }) {
   const router = useRouter();
-  const { isAuthenticated, user, loading, hasRole } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
     // Wait for auth check to complete
@@ -23,13 +17,7 @@ export default function AdminLayout({ children }) {
       router.push('/login');
       return;
     }
-
-    // Check if user has ADMIN role
-    if (!hasRole(ROLES.ADMIN)) {
-      router.push('/unauthorized');
-      return;
-    }
-  }, [isAuthenticated, loading, user, router]);
+  }, [isAuthenticated, loading, router]);
 
   // Show loading state while checking authentication
   if (loading) {
@@ -43,23 +31,16 @@ export default function AdminLayout({ children }) {
     );
   }
 
-  // Don't render if not authenticated or doesn't have admin role
-  if (!isAuthenticated || !hasRole(ROLES.ADMIN)) {
+  // Don't render if not authenticated
+  if (!isAuthenticated) {
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA]">
-      {/* Top Navbar */}
-      <AdminNavbar />
-      
-      {/* Sidebar */}
-      <AdminSidebar />
-      
-      {/* Main Content Area */}
-      <main className="ml-64 mt-16 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+      <div className="container mx-auto">
         {children}
-      </main>
+      </div>
     </div>
   );
 }

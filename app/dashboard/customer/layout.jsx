@@ -3,14 +3,13 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/useAuth';
-import AdminNavbar from "@/components/AdminNavbar";
-import AdminSidebar from "@/components/AdminSidebar";
-
+import CustomerNavbar from "@/components/CustomerNavbar";
+import CustomerSidebar from "@/components/CustomerSidebar";
 const ROLES = {
-  ADMIN: 'ADMIN',
+  CUSTOMER: 'CUSTOMER',
 };
 
-export default function AdminLayout({ children }) {
+export default function CustomerLayout({ children }) {
   const router = useRouter();
   const { isAuthenticated, user, loading, hasRole } = useAuth();
 
@@ -24,8 +23,8 @@ export default function AdminLayout({ children }) {
       return;
     }
 
-    // Check if user has ADMIN role
-    if (!hasRole(ROLES.ADMIN)) {
+    // Check if user has CUSTOMER role
+    if (!hasRole(ROLES.CUSTOMER)) {
       router.push('/unauthorized');
       return;
     }
@@ -43,21 +42,17 @@ export default function AdminLayout({ children }) {
     );
   }
 
-  // Don't render if not authenticated or doesn't have admin role
-  if (!isAuthenticated || !hasRole(ROLES.ADMIN)) {
+  // Don't render if not authenticated or doesn't have customer role
+  if (!isAuthenticated || !hasRole(ROLES.CUSTOMER)) {
     return null;
   }
 
   return (
     <div className="min-h-screen bg-[#F5F6FA]">
-      {/* Top Navbar */}
-      <AdminNavbar />
-      
-      {/* Sidebar */}
-      <AdminSidebar />
-      
+        <CustomerNavbar/>
+        <CustomerSidebar/>
       {/* Main Content Area */}
-      <main className="ml-64 mt-16 p-8">
+      <main className="p-8">
         {children}
       </main>
     </div>
