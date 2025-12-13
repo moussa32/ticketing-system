@@ -87,9 +87,7 @@ graph LR
     AuthService --> Middleware[lib/auth/middleware.js validates JWT + role requirement]
 ```
 
-- **Notes & Next steps**:
-    - The database model/migrations already use lowercase ENUM values (`'admin','agent','customer'`) — this change aligns client/server strings with the DB.
-    - If you want, I can commit this README update and push to `feature/user-authentication`, or include additional diagrams (sequence diagram, swimlane) for more detail.
+- **Functionalities**:
 
     ---
 
