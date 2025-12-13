@@ -38,8 +38,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 **Abdelrahman**
 
-- **Summary of work done**: converted role string values from UPPERCASE to lowercase across the auth flow to match the database ENUM and unify role handling. Updated login/register seed data and adjusted client/server role mappings so redirects and authorization checks use `admin`, `agent`, `customer`.
-
 - **Files changed**:
     - `app/login/page.js` — client login page and `ROLES` mapping
     - `lib/services/authService.js` — centralized auth logic and `ROLES` constants
