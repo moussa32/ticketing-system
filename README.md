@@ -47,20 +47,16 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 - **Pages**:
     - `app/login/page.js` — Login page (client-side form)
-    - `app/register/page.js` — Registration page
     - `app/profile/page.js` — User profile
     - `app/profile/change-password/page.js` — Change password page
-    - `app/dashboard/admin/page.jsx` — Admin dashboard (users/categories management)
     - `app/dashboard/agent/page.js` — Agent dashboard
     - `app/dashboard/customer/page.js` — Customer dashboard
 
 - **API Endpoints** (main auth/user endpoints):
     - `POST /api/auth/login` — Login endpoint (returns JWT and user info)
-    - `POST /api/auth/register` — Register new user
     - `POST /api/auth/logout` — Logout
     - `GET|PUT /api/user/profile` — Get or update profile
     - `POST /api/user/change-password` — Change password
-    - `GET /api/users` — (admin) list users
 
 - **Branch**: `feature/user-authentication`
 
@@ -152,10 +148,3 @@ graph LR
         - Params: `id`, `userInfo` (object with profile fields to update).
         - Behavior: Uses `upsert` to update user and returns the updated record.
         - Returns: `Promise<Object>` — updated user record.
-
-    - `forgetPassword(email)`
-        - Description: Stub that checks existence of a user by email. Intended to start forget-password flow (send email, token, etc.).
-        - Params: `email` (string).
-        - Behavior: Throws if user does not exist.
-
-    - `fullbackForgetPassword(params)`
