@@ -153,16 +153,6 @@ export default function LoginPage() {
               Customer: customer@customer.com / password123
             </p>
           </div>
-
-          {/* Register Link */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Don't have an account?{' '}
-              <Link href="/register" className="text-indigo-600 hover:text-indigo-700 font-semibold">
-                Sign up
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>
