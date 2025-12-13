@@ -54,7 +54,8 @@ export default function TicketsTable({ tickets }) {
               <TableHead className="pl-6">ID</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Priority</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Urgency</TableHead>
               <TableHead>Assigned To</TableHead>
               <TableHead>Customer</TableHead>
               <TableHead>Created</TableHead>
@@ -82,7 +83,20 @@ export default function TicketsTable({ tickets }) {
                     </div>
                   </TableCell>
                   <TableCell>{getStatusBadge(ticket.status)}</TableCell>
-                  <TableCell>{getPriorityBadge(ticket.priority)}</TableCell>
+                  <TableCell>
+                    {ticket.category ? (
+                      <Badge variant="outline" className="font-normal">
+                        {ticket.category.name}
+                      </Badge>
+                    ) : (
+                      <span className="text-gray-400 italic text-sm">-</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {ticket.category && ticket.category.urgency && (
+                       getPriorityBadge(ticket.category.urgency.name)
+                    )}
+                  </TableCell>
                   <TableCell>
                     {ticket.assignedAgent ? (
                       <div className="flex items-center gap-2">

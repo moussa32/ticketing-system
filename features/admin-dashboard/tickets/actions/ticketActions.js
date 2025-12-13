@@ -1,6 +1,6 @@
 'use server';
 
-import { Users, Tickets } from '@/lib/database';
+import { Users, Tickets, Categories, Urgency } from '@/lib/database';
 
 export async function getTicketStats() {
   try {
@@ -71,6 +71,16 @@ export async function getAllTickets() {
           as: 'customer',
           attributes: ['id', 'firstName', 'lastName', 'email'],
           required: true
+        },
+        {
+          model: Categories,
+          as: 'category',
+          include: [
+            {
+              model: Urgency,
+              as: 'urgency'
+            }
+          ]
         }
       ],
       order: [['createdAt', 'DESC']]
