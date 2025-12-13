@@ -147,7 +147,7 @@ async function handleSubmitReply(formData) {
           <button
             type="button"
            className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 cursor-pointer"
-           onClick={()=>{route.push('/customer/viewTicket/')}}
+           onClick={()=>{route.push('/dashboard/customer/viewTicket/')}}
           >
            Cancel
           </button>

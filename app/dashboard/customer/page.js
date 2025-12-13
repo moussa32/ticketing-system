@@ -16,14 +16,14 @@ export default function DashboardHome() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
           <a
-            href="/customer/addTicket"
+            href="/dashboard/customer/addTicket"
             className="h-24 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 text-lg rounded-lg"
           >
             Create a New Ticket
           </a>
 
           <a
-            href="/customer/viewTicket"
+            href="/dashboard/customer/viewTicket"
             className="h-24 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 text-lg rounded-lg"
           >
             View Tickets

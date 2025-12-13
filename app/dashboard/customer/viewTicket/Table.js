@@ -35,16 +35,16 @@ export default function TicketTableHTML({ ticketsList }) {
   }
 
   const handleAddTicket = () => {
-    location.href="/customer/addTicket";
+    location.href="/dashboard/customer/addTicket";
   }
 
   const handleViewTicket =(selectedTicketObj)=>{
     // Save ticket in sessionStorage
        const ticketId=selectedTicketObj.ticketno;
        sessionStorage.setItem("selectedticket", JSON.stringify(selectedTicketObj));
-       location.href=`/customer/replyTicket/${ticketId}`; 
+       location.href=`/dashboard/customer/replyTicket/${ticketId}`; 
     }
-  const handleReplyTicket=()=>{ location.href="/customer/replyTicket" }
+  const handleReplyTicket=()=>{ location.href="/dashboard/customer/replyTicket" }
 
  const handleDeleteTicket=async(ticketId)=>{
     if (!confirm("Are you sure you want to delete this ticket?")) return;
@@ -78,7 +78,7 @@ export default function TicketTableHTML({ ticketsList }) {
         <button
             type="button"
            className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 cursor-pointer"
-           onClick={()=>{route.push('/customer/')}}
+           onClick={()=>{route.push('/dashboard/customer/')}}
           >
            Cancel
         </button>

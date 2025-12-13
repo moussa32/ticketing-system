@@ -1,6 +1,6 @@
 "use server"
 
-import {replyToTicket} from '../../../lib/services/TicketService.js';
+import {replyToTicket} from '../../../../lib/services/TicketService.js';
 import fs from "fs";
 import path from "path";
 
@@ -32,7 +32,6 @@ export async function replyTicket(formData) {
             await replyToTicket(ticketId,replyMessage,status,userId,filename);  
             return { ok: true, message: `Reply submitted successfully!` };
     }catch (error) {
-        console.error("Error in replyTicket action:", error);
           return { ok: false, message: "Failed to submit reply" };
     }       
 }
