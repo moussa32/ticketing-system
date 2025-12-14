@@ -12,6 +12,7 @@ const ROLES = {
 
 export default function Layout({ children }) {
 const router = useRouter();
+/*
   const { isAuthenticated, user, loading, hasRole } = useAuth();
 
   useEffect(() => {
@@ -45,7 +46,7 @@ if (loading) {
   // Don't render if not authenticated or doesn't have customer role
   if (!isAuthenticated || !hasRole(ROLES.CUSTOMER)) {
     return null;
-  }
+  }*/
 
 
 
@@ -56,8 +57,10 @@ if (loading) {
       <CustomerNavbar/>
 
       {/* MAIN AREA */}
+      <div>
         {children}
         <Toaster />
+      </div>
       {/* FOOTER */}
       <footer className="flex justify-center gap-10 p-4 text-sm bg-black text-white">
         <a href="#">About</a>

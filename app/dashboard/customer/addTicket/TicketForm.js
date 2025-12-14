@@ -20,11 +20,9 @@ async function handleSubmit(formData) {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <header className="flex items-center justify-center p-4 bg-white border-b border-gray-300 text-black">
-        <h1 className="text-xl font-semibold">Create a New Ticket</h1>
-      </header>
-
-      <main className="flex-1 p-6">
+     
+      <main className="flex-1 p-20 items-center justify-center">
+         <div className="text-center"><h1 className="text-xl font-semibold p-4">Create a New Ticket</h1></div>
         <form
           action={handleSubmit}
           className="space-y-6 max-w-2xl mx-auto" 

@@ -65,10 +65,12 @@ export default function TicketTableHTML({ ticketsList }) {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Tickets List</h2>
-     <div className="flex gap-4">
+    <div className="flex flex-col min-h-screen bg-white p-20">
+      <div className="relative flex items-center mb-8">
+  <h2 className="absolute left-1/2 -translate-x-1/2 text-xl font-semibold">
+    Tickets List
+  </h2>
+     <div className="ml-auto flex gap-4">
         <button
           onClick={handleAddTicket}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
