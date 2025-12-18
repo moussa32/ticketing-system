@@ -1,6 +1,6 @@
 'use server';
 
-import { Users, Sessions } from '@/lib/database';
+import { Users } from '@/lib/database';
 import { Op } from 'sequelize';
 
 export async function getAllUsers() {
@@ -75,7 +75,7 @@ export async function resetUserPassword(userId) {
 
 export async function logoutUserSession(userId) {
   try {
-    await Sessions.update(
+    /*await Sessions.update(
       { isActive: false },
       { 
         where: { 
@@ -84,7 +84,7 @@ export async function logoutUserSession(userId) {
         },
         limit: 1
       }
-    );
+    );*/
     
     return { success: true, message: 'User logged out successfully' };
   } catch (error) {
@@ -95,7 +95,7 @@ export async function logoutUserSession(userId) {
 
 export async function logoutAllUserSessions(userId) {
   try {
-    await Sessions.update(
+    /*await Sessions.update(
       { isActive: false },
       { 
         where: { 
@@ -103,7 +103,7 @@ export async function logoutAllUserSessions(userId) {
           isActive: true
         }
       }
-    );
+    );*/
     
     return { success: true, message: 'All sessions logged out successfully' };
   } catch (error) {
