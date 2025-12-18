@@ -1,6 +1,6 @@
 "use server";
 
-import {deleteTicketWithAttachment} from '../../../../lib/services/TicketService.js';
+import {deleteTicketWithAttachment} from '../../../../lib/services/CustomerTicketService.js';
 export async function deleteTicketAction(ticketId) {
     try {
         await deleteTicketWithAttachment(ticketId);

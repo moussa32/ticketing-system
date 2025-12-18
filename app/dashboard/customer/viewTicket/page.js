@@ -1,5 +1,5 @@
 import Table from "./Table";
-import {getAllTicketsByUserID} from "@/lib/services/TicketService";
+import {getAllTicketsByUserID} from "@/lib/services/CustomerTicketService";
 
 export default async function Page() {
   // pass user ID dynamically when auth is implemented

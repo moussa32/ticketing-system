@@ -1,6 +1,6 @@
 "use server"
 
-import {replyToTicket} from '../../../../lib/services/TicketService.js';
+import {replyToTicket} from '../../../../lib/services/CustomerTicketService.js';
 import fs from "fs";
 import path from "path";
 

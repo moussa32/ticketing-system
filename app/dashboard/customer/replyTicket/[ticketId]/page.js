@@ -1,5 +1,5 @@
 import ReplyTicketHTML from "../ReplyTicketHTML";
-import {getReplyMessagesByTicketID} from "../../../../../lib/services/TicketService";
+import {getReplyMessagesByTicketID} from "../../../../../lib/services/CustomerTicketService";
 export default async function Page({params}) {
   const resolvedParams = await params;   // unwrap the promise
   const ticketId = resolvedParams.ticketId;

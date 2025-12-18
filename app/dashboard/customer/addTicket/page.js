@@ -1,6 +1,6 @@
 "use server"
 
-import { getCategoriesWithUrgency, getDepartments } from "@/lib/services/TicketService";
+import { getCategoriesWithUrgency, getDepartments } from "@/lib/services/CustomerTicketService";
 import TicketHTML from "./TicketForm";
 
 // This is a server component that fetches data and renders the TicketHTML component
