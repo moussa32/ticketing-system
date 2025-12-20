@@ -89,10 +89,10 @@ export default function DashboardHome() {
         </p>
       </a>
 
-      <div
-        className="bg-blue-50 rounded-2xl p-8 text-center
+      <a href="/dashboard/customer/faq" className="bg-blue-50 rounded-2xl p-8 text-center
                    hover:shadow-lg transition-shadow cursor-pointer"
       >
+     
         <div className="flex justify-center mb-4">
           <svg
               className="w-10 h-10 text-blue-600"
@@ -122,7 +122,8 @@ export default function DashboardHome() {
         <p className="text-gray-600 text-sm leading-relaxed">
           You can find answers to common questions here.
         </p>
-      </div>
+      
+      </a>
   </div>
 </div>
       </main>
