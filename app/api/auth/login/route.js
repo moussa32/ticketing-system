@@ -17,10 +17,11 @@ export async function POST(request) {
       );
     }
 
+    console.log(email, password)
     // Call the auth service to log in
     const result = await loginUser({ email, password });
 
-    if (!user) {
+    if (!result) {
       return NextResponse.json(
         { message: 'User not found' },
         { status: 404 }

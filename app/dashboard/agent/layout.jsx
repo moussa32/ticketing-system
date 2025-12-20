@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth/useAuth';
 import AgentNavbar from "@/components/AgentNavbar";
 import AgentSidebar from "@/components/AgentSidebar";
 const ROLES = {
-  AGENT: 'AGENT',
+  AGENT: 'agent',
 };
 
 export default function AgentLayout({ children }) {

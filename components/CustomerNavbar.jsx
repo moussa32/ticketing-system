@@ -8,13 +8,8 @@ import { useAuth } from '@/lib/auth/useAuth';
 
 export default function CustomerNavbar() {
   const [showDropdown, setShowDropdown] = useState(false);
-  const { user: authUser, logout } = useAuth();
+  const { user, logout } = useAuth();
 
-  const user = authUser || {
-    name: 'Customer User',
-    email: 'customer@ticketing.com',
-    avatar: null,
-  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-30">
@@ -30,14 +25,14 @@ export default function CustomerNavbar() {
             className="flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-gray-50 transition-colors duration-200"
           >
             <Avatar className="w-8 h-8 border border-gray-200">
-              <AvatarImage src={user?.avatar} alt={user?.name} />
+              <AvatarImage src={user?.avatar} alt={user?.firstName} />
               <AvatarFallback className="bg-gray-100 text-gray-600 font-medium text-sm">
-                {(user?.name || '').split(' ').map(n => n?.[0]).join('')}
+                {(user?.firstName || '').split(' ').map(n => n?.[0]).join('')}
               </AvatarFallback>
             </Avatar>
 
             <div className="text-left hidden md:block">
-              <p className="text-sm font-medium text-gray-700">{user?.name}</p>
+              <p className="text-sm font-medium text-gray-700">{user?.firstName}</p>
             </div>
 
             <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -50,7 +45,7 @@ export default function CustomerNavbar() {
               className="absolute right-0 mt-1 w-56 bg-white rounded-md border border-gray-200 shadow-sm py-1"
             >
               <div className="px-4 py-3 border-b border-gray-100">
-                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                <p className="text-sm font-medium text-gray-900">{user?.firstName}</p>
                 <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
               </div>
 

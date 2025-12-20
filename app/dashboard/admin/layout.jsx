@@ -7,7 +7,7 @@ import AdminNavbar from "@/components/AdminNavbar";
 import AdminSidebar from "@/components/AdminSidebar";
 
 const ROLES = {
-  ADMIN: 'ADMIN',
+  ADMIN: 'admin',
 };
 
 export default function AdminLayout({ children }) {
