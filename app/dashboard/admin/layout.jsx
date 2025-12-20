@@ -12,9 +12,9 @@ const ROLES = {
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
-  const { isAuthenticated, user, loading, hasRole } = useAuth();
+  //const { isAuthenticated, user, loading, hasRole } = useAuth();
 
-  useEffect(() => {
+  /*useEffect(() => {
     // Wait for auth check to complete
     if (loading) return;
 
@@ -29,10 +29,10 @@ export default function AdminLayout({ children }) {
       router.push('/unauthorized');
       return;
     }
-  }, [isAuthenticated, loading, user, router]);
+  }, [isAuthenticated, loading, user, router]);*/
 
   // Show loading state while checking authentication
-  if (loading) {
+  /*if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -41,12 +41,12 @@ export default function AdminLayout({ children }) {
         </div>
       </div>
     );
-  }
+  }*/
 
   // Don't render if not authenticated or doesn't have admin role
-  if (!isAuthenticated || !hasRole(ROLES.ADMIN)) {
+  /*if (!isAuthenticated || !hasRole(ROLES.ADMIN)) {
     return null;
-  }
+  }*/
 
   return (
     <div className="min-h-screen bg-[#F5F6FA]">
