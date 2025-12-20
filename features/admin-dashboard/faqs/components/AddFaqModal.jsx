@@ -46,7 +46,7 @@ export default function AddFaqModal({ isOpen, onClose, onSave, initialData, isLo
     try {
       await onSave(formData);
     } catch (error) {
-      console.error('Error saving category:', error);
+      console.error('Error saving faq:', error);
     }
   };
 
@@ -54,7 +54,7 @@ export default function AddFaqModal({ isOpen, onClose, onSave, initialData, isLo
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{initialData ? 'Edit Category' : 'Add New Category'}</DialogTitle>
+          <DialogTitle>{initialData ? 'Edit FAQ' : 'Add New FAQ'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
