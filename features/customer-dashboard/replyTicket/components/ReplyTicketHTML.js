@@ -1,7 +1,7 @@
 "use client";
 import { useState,useEffect } from "react";
 import toast from "react-hot-toast";
-import { replyTicket } from "../../../../app/dashboard/customer/replyTicket/action";
+import { replyTicket } from "../actions/action";
 import { useRouter } from "next/navigation";
 
 export default function ReplyTicketHTML({replyMessages}) {

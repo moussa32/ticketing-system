@@ -1,6 +1,20 @@
 "use client"
 
+import { redirect } from "next/dist/server/api-utils";
+
 export default function DashboardHome() {
+
+
+
+const onKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      // Implement search functionality here
+      location.href="/dashboard/customer/search?query="+e.target.value;
+    }
+  };
+
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-200">
       
@@ -20,6 +34,7 @@ export default function DashboardHome() {
       className="w-full py-4 pl-14 pr-6 rounded-full
                  text-gray-800 placeholder-gray-500
                  focus:outline-none focus:ring-2 focus:ring-white/60 bg-white" 
+                 onKeyDown={onKeyPress}
     />
 
     {/* Search Icon */}
