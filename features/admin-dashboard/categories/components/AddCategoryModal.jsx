@@ -1,39 +1,45 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import { getAllUrgencies } from '../actions/categoryActions';
+import { getAllUrgencies } from "../actions/categoryActions";
 
 const PRIORITY_OPTIONS = [
-  { value: 'low', label: 'Low' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' },
-  { value: 'critical', label: 'Critical' }
+  { value: "low", label: "Low" },
+  { value: "medium", label: "Medium" },
+  { value: "high", label: "High" },
+  { value: "critical", label: "Critical" },
 ];
 
-export default function AddCategoryModal({ isOpen, onClose, onSave, initialData, isLoading = false }) {
+export default function AddCategoryModal({
+  isOpen,
+  onClose,
+  onSave,
+  initialData,
+  isLoading = false,
+}) {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    urgencyId: ''
+    name: "",
+    description: "",
+    urgencyId: "",
   });
   const [urgencies, setUrgencies] = useState([]);
   const [loadingConfig, setLoadingConfig] = useState(true);
@@ -45,11 +51,14 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
         setUrgencies(urgencyData);
         // Set default urgency if available
         if (urgencyData.length > 0 && !initialData) {
-            // Default to first option or specific one if logic dictates
-             setFormData(prev => ({ ...prev, urgencyId: urgencyData[0].id.toString() }));
+          // Default to first option or specific one if logic dictates
+          setFormData((prev) => ({
+            ...prev,
+            urgencyId: urgencyData[0].urgency_id.toString(),
+          }));
         }
       } catch (error) {
-        console.error('Failed to fetch urgencies', error);
+        console.error("Failed to fetch urgencies", error);
       } finally {
         setLoadingConfig(false);
       }
@@ -60,15 +69,20 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
   useEffect(() => {
     if (initialData) {
       setFormData({
-        name: initialData.name || '',
-        description: initialData.description || '',
-        urgencyId: initialData.urgencyId ? initialData.urgencyId.toString() : (urgencies.length > 0 ? urgencies[0].id.toString() : '')
+        name: initialData.name || "",
+        description: initialData.description || "",
+        urgencyId: initialData.urgencyId
+          ? initialData.urgencyId.toString()
+          : urgencies.length > 0
+          ? urgencies[0].urgency_id.toString()
+          : "",
       });
     } else {
-      setFormData(prev => ({
-        name: '',
-        description: '',
-        urgencyId: urgencies.length > 0 ? urgencies[0].id.toString() : ''
+      setFormData((prev) => ({
+        name: "",
+        description: "",
+        urgencyId:
+          urgencies.length > 0 ? urgencies[0].urgency_id.toString() : "",
       }));
     }
   }, [initialData, isOpen]);
@@ -78,10 +92,10 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
     try {
       await onSave({
         ...formData,
-        urgencyId: parseInt(formData.urgencyId)
+        urgencyId: parseInt(formData.urgencyId),
       });
     } catch (error) {
-      console.error('Error saving category:', error);
+      console.error("Error saving category:", error);
     }
   };
 
@@ -89,7 +103,9 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{initialData ? 'Edit Category' : 'Add New Category'}</DialogTitle>
+          <DialogTitle>
+            {initialData ? "Edit Category" : "Add New Category"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
@@ -97,7 +113,9 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               placeholder="e.g. Hardware"
               required
             />
@@ -107,7 +125,9 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Category description..."
               rows={3}
             />
@@ -116,7 +136,9 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
             <Label htmlFor="urgencyId">Urgency</Label>
             <Select
               value={formData.urgencyId}
-              onValueChange={(value) => setFormData({ ...formData, urgencyId: value })}
+              onValueChange={(value) =>
+                setFormData({ ...formData, urgencyId: value })
+              }
               disabled={loadingConfig}
             >
               <SelectTrigger id="urgencyId">
@@ -124,8 +146,11 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
               </SelectTrigger>
               <SelectContent>
                 {urgencies.map((option) => (
-                  <SelectItem key={option.id} value={option.id.toString()}>
-                    {option.name}
+                  <SelectItem
+                    key={option.urgency_id}
+                    value={option.urgency_id.toString()}
+                  >
+                    {option.urgency_name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -136,7 +161,7 @@ export default function AddCategoryModal({ isOpen, onClose, onSave, initialData,
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Saving...' : 'Save'}
+              {isLoading ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>
         </form>
