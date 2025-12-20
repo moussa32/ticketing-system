@@ -1,4 +1,4 @@
-import Table from "./Table";
+import Table from "@/features/customer-dashboard/viewTicket/components/Table"
 import {getAllTicketsByUserID} from "@/lib/services/CustomerTicketService";
 
 export default async function Page() {

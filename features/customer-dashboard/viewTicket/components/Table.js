@@ -1,6 +1,6 @@
 'use client'
 import { useState,useTransition } from "react";
-import { deleteTicketAction } from "../viewTicket/action.js";
+import { deleteTicketAction } from "../actions/action.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 

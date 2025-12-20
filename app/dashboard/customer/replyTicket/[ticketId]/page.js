@@ -1,4 +1,4 @@
-import ReplyTicketHTML from "../ReplyTicketHTML";
+import ReplyTicketHTML from "@/features/customer-dashboard/replyTicket/components/ReplyTicketHTML";
 import {getReplyMessagesByTicketID} from "../../../../../lib/services/CustomerTicketService";
 export default async function Page({params}) {
   const resolvedParams = await params;   // unwrap the promise
