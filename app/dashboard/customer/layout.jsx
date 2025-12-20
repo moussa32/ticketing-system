@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth/useAuth';
 import CustomerNavbar from "@/components/CustomerNavbar";
 import CustomerSidebar from "@/components/CustomerSidebar";
 const ROLES = {
-  CUSTOMER: 'CUSTOMER',
+  CUSTOMER: 'customer',
 };
 
 export default function CustomerLayout({ children }) {
