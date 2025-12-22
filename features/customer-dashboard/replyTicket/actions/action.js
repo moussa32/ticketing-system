@@ -4,14 +4,14 @@ import {replyToTicket} from '../../../../lib/services/CustomerTicketService.js';
 import fs from "fs";
 import path from "path";
 
-
 export async function replyTicket(formData) {
     try {
         console.log("Received formData in replyTicket action.", formData);
+     
             const ticketId = formData.get("ticketId");
             const replyMessage = formData.get("replyMessage"); 
             const status=formData.get("status");
-            const userId=formData.get("userId"); // Assuming userId is passed in formData
+            const userId=formData.get("userId");
             const file = formData.get("file"); // Get the uploaded file
 
             let filename = null;

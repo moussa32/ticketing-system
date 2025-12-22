@@ -4,9 +4,12 @@ import {addTicket} from '../../../../lib/services/CustomerTicketService.js';
 import fs from "fs";
 import path from "path";
 
+
+
 // the below method handles the form submission
 export async function saveTicket(formData) {
     try {
+            const userId = formData.get("userId");
             const category = formData.get("category");
             const subject = formData.get("subject");
             const description = formData.get("description");
@@ -16,8 +19,6 @@ export async function saveTicket(formData) {
 
             const [catId,urgencyId]=category.split(",");
             const status="Opened";
-            const user_id=1; // Replace with actual user ID from session/auth context
-
             // Handle attachment
     const file = formData.get("attachment");
     let filename = null;
@@ -34,11 +35,12 @@ export async function saveTicket(formData) {
       fs.writeFileSync(filePath, buffer);
     }
 
-    const ticketNo = await addTicket(subject,description,status,department,catId,urgencyId,user_id,filename);
+    const ticketNo = await addTicket(subject,description,status,department,catId,urgencyId,userId,filename);
 
      return { ok: true, message: `Ticket #${ticketNo} submitted successfully!` };
 
     }catch (error) {
+      console.error("Error saving ticket:", error);
           return { ok: false, message: "Failed to submit ticket" };
     }
     

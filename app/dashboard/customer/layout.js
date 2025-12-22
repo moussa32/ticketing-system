@@ -7,12 +7,12 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/useAuth';
 import CustomerNavbar from "@/components/CustomerNavbar";
 const ROLES = {
-  CUSTOMER: 'CUSTOMER',
+  CUSTOMER: 'customer',
 };
 
 export default function Layout({ children }) {
 const router = useRouter();
-/*
+
   const { isAuthenticated, user, loading, hasRole } = useAuth();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ if (loading) {
   // Don't render if not authenticated or doesn't have customer role
   if (!isAuthenticated || !hasRole(ROLES.CUSTOMER)) {
     return null;
-  }*/
+  }
 
 
 

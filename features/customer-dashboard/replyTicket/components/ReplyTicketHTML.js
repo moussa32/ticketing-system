@@ -7,12 +7,21 @@ import { useRouter } from "next/navigation";
 export default function ReplyTicketHTML({replyMessages}) {
   const [ticket, setTicket] = useState(null);
   const route = useRouter();
+    const [user, setUser] = useState(null);
+
 
   useEffect(()=>{
     const ticketData=sessionStorage.getItem("selectedticket");
     if(ticketData){
       setTicket(JSON.parse(ticketData));
     }
+
+      const userInfo = localStorage.getItem('user');
+      const parsedUser = JSON.parse(userInfo);
+      if(parsedUser)
+        setUser(parsedUser);
+
+
   },[]);
 
    if (!ticket) return null; 
@@ -25,6 +34,7 @@ export default function ReplyTicketHTML({replyMessages}) {
 
 
 async function handleSubmitReply(formData) {
+    formData.append("userId", user?.id);
     const res = await replyTicket(formData); 
     if (res.ok) {
       toast.success(res.message);
@@ -120,7 +130,7 @@ async function handleSubmitReply(formData) {
         >
           <div>
             <input type="hidden" name="ticketId" value={ticketId} />
-            <input type="hidden" name="userId" value="1" />
+            <input type="hidden" name="userId" value={userId} />
             <input type="hidden" name="status" value={status} />
              {/* Replace with actual user ID */}
             <label className="mb-1 font-medium">

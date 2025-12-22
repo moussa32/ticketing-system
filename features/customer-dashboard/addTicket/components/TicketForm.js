@@ -3,19 +3,29 @@
 import { saveTicket } from "../actions/action";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useEffect ,useState} from "react";
+
+   
 
 export default function TicketHTML({ categories, departments }) {
 
 
     const route = useRouter();
+    const [user, setUser] = useState(null);
+  
+    useEffect(() => {
+       const userInfo = localStorage.getItem('user');
+      const parsedUser = JSON.parse(userInfo);
+      if(parsedUser)
+        setUser(parsedUser);
+    }, []);
     
-async function handleSubmit(formData) {
-    const res = await saveTicket(formData);
-
+async function handleSubmit(formData) { 
+  formData.append("userId", user?.id);
+  const res = await saveTicket(formData);
     if (res.ok) toast.success(res.message);
     else toast.error(res.message);
   }
-
 
 
   return (

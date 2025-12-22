@@ -4,13 +4,12 @@ import { deleteTicketAction } from "../actions/action.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
-
 export default function TicketTableHTML({ ticketsList }) {
 
   const [filterStatus, setfilterStatus] = useState("all")
   const [searchSubject, setSearchSubject] = useState("")
   const [isPending, startTransition] = useTransition();
+
 
   const list = Array.isArray(ticketsList) ? ticketsList : [];
 
