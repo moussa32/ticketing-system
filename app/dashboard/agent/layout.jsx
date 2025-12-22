@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use client';
 
 import { useEffect } from 'react';
@@ -8,51 +9,23 @@ import AgentSidebar from "@/components/AgentSidebar";
 const ROLES = {
   AGENT: 'agent',
 };
+=======
+// import AgentSidebar from "@/components/AgentSidebar";
+import AgentNavbar from "../../../features/agent-dashboard/v2/Navebar";
+import AdminSidebar from './../../../components/AdminSidebar';
+>>>>>>> Branch_Customer_Agent_FAQ
 
 export default function AgentLayout({ children }) {
-  const router = useRouter();
-  const { isAuthenticated, user, loading, hasRole } = useAuth();
-
-  useEffect(() => {
-    // Wait for auth check to complete
-    if (loading) return;
-
-    // Redirect to login if not authenticated
-    if (!isAuthenticated) {
-      router.push('/login');
-      return;
-    }
-
-    // Check if user has AGENT role
-    if (!hasRole(ROLES.AGENT)) {
-      router.push('/unauthorized');
-      return;
-    }
-  }, [isAuthenticated, loading, user, router]);
-
-  // Show loading state while checking authentication
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render if not authenticated or doesn't have agent role
-  if (!isAuthenticated || !hasRole(ROLES.AGENT)) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-[#F5F6FA]">
-        <AgentNavbar/>
-        <AgentSidebar/>
+      {/* Top Navbar */}
+      <AgentNavbar />
+      
+      {/* Sidebar */}
+      <AdminSidebar />
+      
       {/* Main Content Area */}
-      <main className="p-8">
+      <main className="ml-64 mt-16 p-8">
         {children}
       </main>
     </div>

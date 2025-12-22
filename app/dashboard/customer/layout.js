@@ -2,36 +2,65 @@
 
 import "../../globals.css";
 import { Toaster } from "react-hot-toast";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth/useAuth';
+import CustomerNavbar from "@/components/CustomerNavbar";
+const ROLES = {
+  CUSTOMER: 'CUSTOMER',
+};
 
 export default function Layout({ children }) {
+const router = useRouter();
+/*
+  const { isAuthenticated, user, loading, hasRole } = useAuth();
+
+  useEffect(() => {
+    // Wait for auth check to complete
+    if (loading) return;
+
+    // Redirect to login if not authenticated
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    // Check if user has CUSTOMER role
+    if (!hasRole(ROLES.CUSTOMER)) {
+      router.push('/unauthorized');
+      return;
+    }
+  }, [isAuthenticated, loading, user, router]);
+
+if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated or doesn't have customer role
+  if (!isAuthenticated || !hasRole(ROLES.CUSTOMER)) {
+    return null;
+  }*/
+
+
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#F5F6FA]">
 
       {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-white border-b border-gray-300 text-black">
-        <h1 className="text-xl font-semibold">Welcome, Sarah</h1>
-
-        {/* SIMPLE HTML DROPDOWN */}
-        <div className="relative group">
-          <button className="flex items-center gap-2 cursor-pointer">
-            {/* Avatar */}
-            <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-black font-bold">
-              SR
-            </div>
-          </button>
-
-          {/* Dropdown menu */}
-          <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md hidden group-hover:block">
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100">Update Info</a>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100">Change Password</a>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100">Logout</a>
-          </div>
-        </div>
-      </header>
+      <CustomerNavbar/>
 
       {/* MAIN AREA */}
+      <div>
         {children}
         <Toaster />
+      </div>
       {/* FOOTER */}
       <footer className="flex justify-center gap-10 p-4 text-sm bg-black text-white">
         <a href="#">About</a>

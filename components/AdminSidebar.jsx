@@ -29,6 +29,11 @@ const menuItems = [
     name: 'Departments',
     href: '/dashboard/admin/departments',
     icon: Building2
+  },
+  {
+    name: 'FAQs',
+    href: '/dashboard/admin/faqs',
+    icon: FolderOpen
   }
 ];
 

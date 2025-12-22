@@ -1,7 +1,12 @@
 "use server";
 
+<<<<<<< HEAD
 import { Users } from "@/lib/database";
 import { Op } from "sequelize";
+=======
+import { Users } from '@/lib/database';
+import { Op } from 'sequelize';
+>>>>>>> Branch_Customer_Agent_FAQ
 
 export async function getAllUsers() {
   try {
@@ -76,7 +81,50 @@ export async function resetUserPassword(userId) {
       tempPassword, // In production, send this via email instead
     };
   } catch (error) {
+<<<<<<< HEAD
     console.error("Error resetting password:", error);
+=======
+    console.error('Error resetting password:', error);
+    return { success: false, message: error.message };
+  }
+}
+
+export async function logoutUserSession(userId) {
+  try {
+    /*await Sessions.update(
+      { isActive: false },
+      { 
+        where: { 
+          userId,
+          isActive: true
+        },
+        limit: 1
+      }
+    );*/
+    
+    return { success: true, message: 'User logged out successfully' };
+  } catch (error) {
+    console.error('Error logging out user:', error);
+    return { success: false, message: error.message };
+  }
+}
+
+export async function logoutAllUserSessions(userId) {
+  try {
+    /*await Sessions.update(
+      { isActive: false },
+      { 
+        where: { 
+          userId,
+          isActive: true
+        }
+      }
+    );*/
+    
+    return { success: true, message: 'All sessions logged out successfully' };
+  } catch (error) {
+    console.error('Error logging out all sessions:', error);
+>>>>>>> Branch_Customer_Agent_FAQ
     return { success: false, message: error.message };
   }
 }
