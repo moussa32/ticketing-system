@@ -63,7 +63,7 @@ export default function TicketsTable({ tickets }) {
               <TableHead>Category</TableHead>
               <TableHead>Urgency</TableHead>
               <TableHead>Assigned To</TableHead>
-              <TableHead>Customer</TableHead>
+              <TableHead>User</TableHead>
               <TableHead>Created</TableHead>
             </TableRow>
           </TableHeader>
@@ -137,12 +137,12 @@ export default function TicketsTable({ tickets }) {
                     <div className="flex items-center gap-2">
                       <Avatar className="w-6 h-6">
                         <AvatarFallback className="bg-purple-100 text-purple-700 text-xs">
-                          {ticket.customer.firstName[0]}
-                          {ticket.customer.lastName[0]}
+                          {ticket.user.firstName[0]}
+                          {ticket.user.lastName[0]}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-sm text-gray-700">
-                        {ticket.customer.firstName} {ticket.customer.lastName}
+                        {ticket.user.firstName} {ticket.user.lastName}
                       </span>
                     </div>
                   </TableCell>

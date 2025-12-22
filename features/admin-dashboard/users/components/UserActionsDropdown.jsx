@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { MoreVertical, Pencil, Key, LogOut, ShieldAlert } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { MoreVertical, Pencil, Key } from "lucide-react";
 
-export default function UserActionsDropdown({ user, onEdit, onResetPassword, onLogoutUser, onLogoutAll }) {
+export default function UserActionsDropdown({ user, onEdit, onResetPassword }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,22 +26,7 @@ export default function UserActionsDropdown({ user, onEdit, onResetPassword, onL
           <Key className="w-4 h-4 mr-2" />
           Reset Password
         </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={() => onLogoutUser(user)}
-          className="text-destructive focus:text-destructive"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout User
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={() => onLogoutAll(user)}
-          className="text-destructive focus:text-destructive"
-        >
-          <ShieldAlert className="w-4 h-4 mr-2" />
-          Logout All Sessions
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
-
