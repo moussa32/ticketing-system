@@ -1,6 +1,6 @@
 "use server"
 
-import {replyToTicket} from '../../../../lib/services/CustomerTicketService.js';
+import {replyToTicket,getTicketDetails} from '../../../../lib/services/CustomerTicketService.js';
 import fs from "fs";
 import path from "path";
 
@@ -33,5 +33,15 @@ export async function replyTicket(formData) {
             return { ok: true, message: `Reply submitted successfully!` };
     }catch (error) {
           return { ok: false, message: "Failed to submit reply" };
+    }       
+}
+
+
+export async function fetchTicketDetails(ticketId) {
+    try {
+        const ticketDetails = await getTicketDetails(ticketId);
+        return { ok: true, data: ticketDetails };
+    } catch (error) {
+        return { ok: false, message: "Failed to fetch ticket details" };
     }       
 }

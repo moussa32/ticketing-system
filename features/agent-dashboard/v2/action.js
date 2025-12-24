@@ -175,13 +175,13 @@ export async function startProgress(ticketId) {
     }
 }
 /// we need to assign ticket to department not user id
-export async function assignTicket(ticketId, userId) {
+export async function assignTicket(ticketId, deptId) {
     try {
-        if (!ticketId || !userId) {
-            throw new Error('Ticket ID and User ID are required');
+        if (!ticketId || !deptId) {
+            throw new Error('Ticket ID and Department ID are required');
         }
 
-        const result = await assignTicketService(ticketId, userId);
+        const result = await assignTicketService(ticketId, deptId);
         return {
             success: true,
             data: result,

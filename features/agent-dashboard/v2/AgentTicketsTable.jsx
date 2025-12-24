@@ -156,7 +156,6 @@ export default function AgentTicketsTable() {
                     <td className="px-6 py-4 font-mono text-gray-600">#{ticket.ticket_id}</td>
                     <td className="px-6 py-4">
                       <p className="font-medium text-gray-900 max-w-xs truncate">{ticket.subject}</p>
-                      <p className="text-sm text-gray-500 truncate">{ticket.description}</p>
                     </td>
                     <td className="px-6 py-4">{getStatusBadge(ticket.status)}</td>
                     <td className="px-6 py-4">{getPriorityBadge(ticket.urgency_id)}</td>
