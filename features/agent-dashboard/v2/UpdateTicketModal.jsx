@@ -65,11 +65,6 @@ export default function UpdateTicketModal({ ticket, onClose }) {
         dept_id: formData.assignedTo
       })
 
-      // Assign ticket if user changed
-      if (formData.assignedTo && formData.assignedTo !== ticket.user_id) {
-        await assignTicket(ticket.ticket_id, formData.assignedTo)
-      }
-
       updateTicket(ticket.ticket_id, {
         subject: formData.subject,
         description: formData.description,
