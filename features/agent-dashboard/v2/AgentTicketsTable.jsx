@@ -198,7 +198,7 @@ export default function AgentTicketsTable() {
                               className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
                             >
                               <Edit className="w-4 h-4" />
-                              Re-assign
+                              Update
                             </button>
                               )
 

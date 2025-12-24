@@ -111,7 +111,7 @@ export default function UpdateTicketModal({ ticket, onClose }) {
               value={formData.subject}
               onChange={handleChange}
               className="w-full px-4 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              disabled={loading}
+              disabled={true}
             />
           </div>
 
@@ -124,7 +124,7 @@ export default function UpdateTicketModal({ ticket, onClose }) {
               onChange={handleChange}
               rows={4}
               className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              disabled={loading}
+              disabled={true}
             />
           </div>
 
@@ -137,7 +137,7 @@ export default function UpdateTicketModal({ ticket, onClose }) {
                 value={formData.status}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 text-black focus:ring-blue-500 focus:border-transparent"
-                disabled={loading}
+                disabled={true}
               >
                 <option value={TICKET_STATUSES.OPEN}>{TICKET_STATUSES.OPEN}</option>
                 <option value={TICKET_STATUSES.IN_PROGRESS}>{TICKET_STATUSES.IN_PROGRESS}</option>
