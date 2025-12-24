@@ -1,6 +1,8 @@
 "use server";
 
 import { Users, Tickets, Categories, Urgency } from "@/lib/database";
+import { TICKET_STATUSES } from '../../../../app/constants/constants.js';
+
 
 export async function getTicketStats() {
   try {
@@ -13,11 +15,11 @@ export async function getTicketStats() {
     });
 
     const statsObject = {
-      open: 0,
-      inProgress: 0,
-      pending: 0,
-      resolved: 0,
-      closed: 0,
+      [TICKET_STATUSES.OPEN]: 0,
+      [TICKET_STATUSES.IN_PROGRESS]: 0,
+      [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: 0,
+      [TICKET_STATUSES.AWAITING_AGENT_REPLY]: 0,
+      [TICKET_STATUSES.CLOSED]: 0,
     };
 
     stats.forEach((stat) => {
@@ -25,20 +27,20 @@ export async function getTicketStats() {
       const count = parseInt(stat.dataValues.count);
 
       switch (status) {
-        case "Open":
-          statsObject.open = count;
+        case TICKET_STATUSES.OPEN:
+          statsObject[TICKET_STATUSES.OPEN] = count;
           break;
-        case "In Progress":
-          statsObject.inProgress = count;
+        case TICKET_STATUSES.IN_PROGRESS:
+          statsObject[TICKET_STATUSES.IN_PROGRESS] = count;
           break;
-        case "Pending":
-          statsObject.pending = count;
+        case TICKET_STATUSES.AWAITING_CUSTOMER_REPLY:
+          statsObject[TICKET_STATUSES.AWAITING_CUSTOMER_REPLY] = count;
           break;
-        case "Resolved":
-          statsObject.resolved = count;
+        case TICKET_STATUSES.AWAITING_AGENT_REPLY:
+          statsObject[TICKET_STATUSES.AWAITING_AGENT_REPLY] = count;
           break;
-        case "Closed":
-          statsObject.closed = count;
+        case TICKET_STATUSES.CLOSED:
+          statsObject[TICKET_STATUSES.CLOSED] = count;
           break;
       }
     });
@@ -47,11 +49,11 @@ export async function getTicketStats() {
   } catch (error) {
     console.error("Error fetching ticket stats:", error);
     return {
-      open: 0,
-      inProgress: 0,
-      pending: 0,
-      resolved: 0,
-      closed: 0,
+      [TICKET_STATUSES.OPEN]: 0,
+      [TICKET_STATUSES.IN_PROGRESS]: 0,
+      [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: 0,
+      [TICKET_STATUSES.AWAITING_AGENT_REPLY]: 0,
+      [TICKET_STATUSES.CLOSED]: 0,
     };
   }
 }

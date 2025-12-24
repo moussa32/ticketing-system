@@ -5,9 +5,10 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { MoreVertical, Edit, Trash2, Eye } from 'lucide-react'
 import AgentTicketModal from './AgentTicketModal'
 import UpdateTicketModal from './UpdateTicketModal'
-import DeleteTicketConfirm from './DeleteTicketConfirm'
 import TicketFilter from './TicketFilter'
 import { useAgentState } from './AgentProvider'
+import { TICKET_STATUSES } from '../../../app/constants/constants.js';
+
 
 export default function AgentTicketsTable() {
   const { 
@@ -39,11 +40,11 @@ export default function AgentTicketsTable() {
 
   const getStatusBadge = (status) => {
     const statusColors = {
-      'Open': 'bg-blue-100 text-blue-800',
-      'In Progress': 'bg-yellow-100 text-yellow-800',
-      'Pending': 'bg-purple-100 text-purple-800',
-      'Resolved': 'bg-green-100 text-green-800',
-      'Closed': 'bg-gray-100 text-gray-800'
+      [TICKET_STATUSES.OPEN]: 'bg-blue-100 text-blue-800',
+      [TICKET_STATUSES.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
+      [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: 'bg-purple-100 text-purple-800',
+      [TICKET_STATUSES.AWAITING_AGENT_REPLY]: 'bg-green-100 text-green-800',
+      [TICKET_STATUSES.CLOSED]: 'bg-gray-100 text-gray-800'
     }
     return (
       <Badge className={`font-medium border-0 ${statusColors[status] || 'bg-gray-100 text-gray-800'}`}>
@@ -147,7 +148,11 @@ export default function AgentTicketsTable() {
                 </tr>
               ) : (
                 filteredTickets.map((ticket) => (
-                  <tr key={ticket.ticket_id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <tr 
+                    key={ticket.ticket_id} 
+                    onClick={() => openModal('view', ticket)}
+                    className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition"
+                  >
                     <td className="px-6 py-4 font-mono text-gray-600">#{ticket.ticket_id}</td>
                     <td className="px-6 py-4">
                       <p className="font-medium text-gray-900 max-w-xs truncate">{ticket.subject}</p>
@@ -169,7 +174,7 @@ export default function AgentTicketsTable() {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">{formatDate(ticket.created_at)}</td>
                     <td className="px-6 py-4">
-                      <div className="relative">
+                      <div className="relative" onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => toggleDropdown(ticket.ticket_id)}
                           className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 transition"
@@ -178,7 +183,7 @@ export default function AgentTicketsTable() {
                         </button>
 
                         {openDropdown === ticket.ticket_id && (
-                          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
                             <button
                               onClick={() => openModal('view', ticket)}
                               className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
@@ -186,20 +191,18 @@ export default function AgentTicketsTable() {
                               <Eye className="w-4 h-4" />
                               View Details
                             </button>
-                            <button
+                            {
+                              ticket.status !== TICKET_STATUSES.CLOSED && (
+                                 <button
                               onClick={() => openModal('update', ticket)}
                               className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
                             >
                               <Edit className="w-4 h-4" />
-                              Update
+                              Re-assign
                             </button>
-                            <button
-                              onClick={() => openModal('delete', ticket)}
-                              className="w-full px-4 py-2 text-left text-sm text-red-700 hover:bg-red-50 flex items-center gap-2"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete
-                            </button>
+                              )
+
+                            }
                           </div>
                         )}
                       </div>
@@ -221,13 +224,6 @@ export default function AgentTicketsTable() {
         <UpdateTicketModal ticket={selectedTicket} onClose={closeModal} />
       )}
 
-      {selectedTicket && modalType === 'delete' && (
-        <DeleteTicketConfirm 
-          ticket={selectedTicket} 
-          onClose={closeModal}
-          onDelete={handleDelete}
-        />
-      )}
     </>
   )
 }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { useAgentState } from './AgentProvider'
 import { updateTicketData, assignTicket, fetchDepartmentUsers } from './action'
+import { TICKET_STATUSES } from '../../../app/constants/constants.js';
 
 export default function UpdateTicketModal({ ticket, onClose }) {
   const { updateTicket } = useAgentState()
@@ -60,7 +61,8 @@ export default function UpdateTicketModal({ ticket, onClose }) {
         subject: formData.subject,
         description: formData.description,
         status: formData.status,
-        urgency_id: parseInt(formData.urgency)
+        urgency_id: parseInt(formData.urgency),
+        dept_id: formData.assignedTo
       })
 
       // Assign ticket if user changed
@@ -73,7 +75,7 @@ export default function UpdateTicketModal({ ticket, onClose }) {
         description: formData.description,
         status: formData.status,
         urgency_id: parseInt(formData.urgency),
-        user_id: formData.assignedTo
+        dept_id: formData.assignedTo
       })
       onClose()
     } catch (error) {
@@ -137,11 +139,11 @@ export default function UpdateTicketModal({ ticket, onClose }) {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 text-black focus:ring-blue-500 focus:border-transparent"
                 disabled={loading}
               >
-                <option value="Open">Open</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Pending">Pending</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Closed">Closed</option>
+                <option value={TICKET_STATUSES.OPEN}>{TICKET_STATUSES.OPEN}</option>
+                <option value={TICKET_STATUSES.IN_PROGRESS}>{TICKET_STATUSES.IN_PROGRESS}</option>
+                <option value={TICKET_STATUSES.AWAITING_CUSTOMER_REPLY}>{TICKET_STATUSES.AWAITING_CUSTOMER_REPLY}</option>
+                <option value={TICKET_STATUSES.AWAITING_AGENT_REPLY}>{TICKET_STATUSES.AWAITING_AGENT_REPLY}</option>
+                <option value={TICKET_STATUSES.CLOSED}>{TICKET_STATUSES.CLOSED}</option>
               </select>
             </div>
 
@@ -164,7 +166,7 @@ export default function UpdateTicketModal({ ticket, onClose }) {
 
           {/* Assign to User */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Assign to Agent</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Assign to Department</label>
             <select
               name="assignedTo"
               value={formData.assignedTo}
@@ -172,10 +174,10 @@ export default function UpdateTicketModal({ ticket, onClose }) {
               className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={loading}
             >
-              <option value="">Select an agent...</option>
+              <option value="">Select a department...</option>
               {departmentUsers.map(user => (
-                <option key={user.user_id} value={user.user_id}>
-                  {user.first_name} {user.last_name}
+                <option key={user.dept_id} value={user.dept_id  }>
+                  {user["dept_name"]} 
                 </option>
               ))}
             </select>

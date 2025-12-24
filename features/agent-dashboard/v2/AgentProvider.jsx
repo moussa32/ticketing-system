@@ -1,6 +1,7 @@
 "use client"
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { fetchAgentTickets } from './action'
+import { TICKET_STATUSES } from '../../../app/constants/constants.js';
 
 export const AgentContext = createContext()
 
@@ -25,11 +26,11 @@ export function AgentProvider({ children }) {
 
   // Stats state
   const [stats, setStats] = useState({
-    assigned: 0,
-    inProgress: 0,
-    pending: 0,
-    closed: 0,
-    urgent: 0
+    [TICKET_STATUSES.OPEN]: 0,
+    [TICKET_STATUSES.IN_PROGRESS]: 0,
+    [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: 0,
+    [TICKET_STATUSES.AWAITING_AGENT_REPLY]: 0,
+    [TICKET_STATUSES.CLOSED]: 0
   })
 
   // Fetch tickets on mount
@@ -60,11 +61,11 @@ export function AgentProvider({ children }) {
   // Calculate stats from tickets
   const updateStats = (ticketsList) => {
     const newStats = {
-      open: ticketsList.filter(t => t.status === 'Open').length,
-      inProgress: ticketsList.filter(t => t.status === 'In Progress').length,
-      pending: ticketsList.filter(t => t.status === 'Pending').length,
-      resolved: ticketsList.filter(t => t.status === 'Resolved').length,
-      closed: ticketsList.filter(t => t.status === 'Closed').length
+      [TICKET_STATUSES.OPEN]: ticketsList.filter(t => t.status === TICKET_STATUSES.OPEN).length,
+      [TICKET_STATUSES.IN_PROGRESS]: ticketsList.filter(t => t.status === TICKET_STATUSES.IN_PROGRESS).length,
+      [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: ticketsList.filter(t => t.status === TICKET_STATUSES.AWAITING_CUSTOMER_REPLY).length,
+      [TICKET_STATUSES.AWAITING_AGENT_REPLY]: ticketsList.filter(t => t.status === TICKET_STATUSES.AWAITING_AGENT_REPLY).length,
+      [TICKET_STATUSES.CLOSED]: ticketsList.filter(t => t.status === TICKET_STATUSES.CLOSED).length
     }
     setStats(newStats)
   }
@@ -80,21 +81,9 @@ export function AgentProvider({ children }) {
     })
   }
 
-  const deleteTicket = (ticketId) => {
-    setTickets(prev => {
-      const updated = prev.filter(t => t.ticket_id !== ticketId)
-      updateStats(updated)
-      return updated
-    })
-  }
-
-  const addReply = (ticketId, reply) => {
-    // This would typically append to a replies array
-    console.log(`Reply added to ticket ${ticketId}:`, reply)
-  }
 
   // Modal actions
-  const openModal = (type, ticket) => {
+  const openModal = (type, ticket) => { 
     setSelectedTicket(ticket)
     setModalType(type)
     setOpenDropdown(null)
@@ -140,8 +129,6 @@ export function AgentProvider({ children }) {
     
     // Actions
     updateTicket,
-    deleteTicket,
-    addReply,
     openModal,
     closeModal,
     toggleDropdown,

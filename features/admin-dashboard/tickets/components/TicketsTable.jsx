@@ -8,15 +8,17 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { TICKET_STATUSES } from '../../../../app/constants/constants.js';
+ 
 
 export default function TicketsTable({ tickets }) {
   const getStatusBadge = (status) => {
     const statusColors = {
-      Open: "bg-blue-100 text-blue-800 hover:bg-blue-100/80",
-      "In Progress": "bg-yellow-100 text-yellow-800 hover:bg-yellow-100/80",
-      Pending: "bg-purple-100 text-purple-800 hover:bg-purple-100/80",
-      Resolved: "bg-green-100 text-green-800 hover:bg-green-100/80",
-      Closed: "bg-gray-100 text-gray-800 hover:bg-gray-100/80",
+      [TICKET_STATUSES.OPEN]: "bg-blue-100 text-blue-800 hover:bg-blue-100/80",
+      [TICKET_STATUSES.IN_PROGRESS]: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100/80",
+      [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: "bg-purple-100 text-purple-800 hover:bg-purple-100/80",
+      [TICKET_STATUSES.AWAITING_AGENT_REPLY]: "bg-orange-100 text-orange-800 hover:bg-orange-100/80",
+      [TICKET_STATUSES.CLOSED]: "bg-gray-100 text-gray-800 hover:bg-gray-100/80",
     };
 
     return (

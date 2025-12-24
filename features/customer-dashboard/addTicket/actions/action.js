@@ -3,6 +3,7 @@
 import {addTicket} from '../../../../lib/services/CustomerTicketService.js';
 import fs from "fs";
 import path from "path";
+import { TICKET_STATUSES } from '../../../../app/constants/constants.js';
 
 
 
@@ -18,7 +19,7 @@ export async function saveTicket(formData) {
             console.log("Saving ticket...", { subject, department, description })
 
             const [catId,urgencyId]=category.split(",");
-            const status="Opened";
+            const status=TICKET_STATUSES.OPEN;
             // Handle attachment
     const file = formData.get("attachment");
     let filename = null;

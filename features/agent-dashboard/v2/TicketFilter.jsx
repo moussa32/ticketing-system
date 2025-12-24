@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import { ChevronDown, X } from 'lucide-react'
+import { TICKET_STATUSES } from '../../../app/constants/constants.js';
 
 export default function TicketFilter({ onFilterChange, activeFilters }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -8,33 +9,33 @@ export default function TicketFilter({ onFilterChange, activeFilters }) {
   const filters = [
     {
       id: 'status-open',
-      label: 'Open',
+      label: `${TICKET_STATUSES.OPEN}`,
       category: 'Status',
-      value: 'Open'
+      value: `${TICKET_STATUSES.OPEN}`
     },
     {
       id: 'status-inprogress',
-      label: 'In Progress',
+      label: `${TICKET_STATUSES.IN_PROGRESS}`,
       category: 'Status',
-      value: 'In Progress'
+      value: `${TICKET_STATUSES.IN_PROGRESS}`
     },
     {
-      id: 'status-pending',
-      label: 'Pending',
+      id: 'status-awaitingcustomer',
+      label: `${TICKET_STATUSES.AWAITING_CUSTOMER_REPLY}`,
       category: 'Status',
-      value: 'Pending'
+      value: `${TICKET_STATUSES.AWAITING_CUSTOMER_REPLY}`
     },
     {
-      id: 'status-resolved',
-      label: 'Resolved',
+      id: 'status-awaitingagent',
+      label: `${TICKET_STATUSES.AWAITING_AGENT_REPLY}`,
       category: 'Status',
-      value: 'Resolved'
+      value: `${TICKET_STATUSES.AWAITING_AGENT_REPLY}`
     },
     {
       id: 'status-closed',
-      label: 'Closed',
+      label: `${TICKET_STATUSES.CLOSED}`,
       category: 'Status',
-      value: 'Closed'
+      value: `${TICKET_STATUSES.CLOSED}`
     },
     {
       id: 'sort-latest',

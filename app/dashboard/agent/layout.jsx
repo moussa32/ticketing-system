@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+// <<<<<<< HEAD
 'use client';
 
 import { useEffect } from 'react';
@@ -9,11 +9,11 @@ import AgentSidebar from "@/components/AgentSidebar";
 const ROLES = {
   AGENT: 'agent',
 };
-=======
+// =======
 // import AgentSidebar from "@/components/AgentSidebar";
-import AgentNavbar from "../../../features/agent-dashboard/v2/Navebar";
+// import AgentNavbar from "../../../features/agent-dashboard/v2/Navebar";
 import AdminSidebar from './../../../components/AdminSidebar';
->>>>>>> Branch_Customer_Agent_FAQ
+// >>>>>>> Branch_Customer_Agent_FAQ
 
 export default function AgentLayout({ children }) {
   return (
@@ -21,7 +21,7 @@ export default function AgentLayout({ children }) {
       {/* Top Navbar */}
       <AgentNavbar />
       
-      {/* Sidebar */}
+      {/* why used admin side bar here? if you have agent sidebar ok and if not please remove it */}
       <AdminSidebar />
       
       {/* Main Content Area */}

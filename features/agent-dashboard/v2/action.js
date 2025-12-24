@@ -1,5 +1,6 @@
 "use server"
-import { viewTickets, viewTicket, replayTicket, deleteTicket as deleteTicketService, updateStatus, updateTicket, assignTicket as assignTicketService, getDepartmentUsers } from '@/lib/services/agent';
+import { TICKET_STATUSES } from '@/app/constants/constants';
+import { viewTickets, viewTicket, replayTicket, updateStatus, updateTicket, assignTicket as assignTicketService, getDepartmentUsers } from '@/lib/services/agent';
 
 export async function fetchAgentTickets() {
     try {
@@ -40,15 +41,14 @@ export async function submitReply(ticketId, replyMessage, userId) {
         if (!ticketId || !replyMessage || !userId) {
             throw new Error('Missing required fields: ticketId, replyMessage, userId');
         }
-
         const result = await replayTicket(ticketId, replyMessage, userId);
         return {
             success: true,
             data: result,
-            message: 'Reply added successfully'
+            message: 'Reply added successfully ',
         };
     } catch (error) {
-        console.error('Error adding reply:', error);
+        console.error('Error adding reply :', error);
         return {
             success: false,
             error: error.message || 'Failed to add reply'
@@ -56,62 +56,6 @@ export async function submitReply(ticketId, replyMessage, userId) {
     }
 }
 
-export async function submitReplyWithFiles(ticketId, replyMessage, userId, filesData = []) {
-    try {
-        if (!ticketId || !replyMessage || !userId) {
-            throw new Error('Missing required fields: ticketId, replyMessage, userId');
-        }
-
-        // Convert base64 files back to buffers
-        const attachments = [];
-        if (Array.isArray(filesData)) {
-            for (const fileData of filesData) {
-                if (fileData && fileData.data && fileData.name) {
-                    // Convert base64 string to Buffer
-                    const buffer = Buffer.from(fileData.data, 'base64');
-                    attachments.push({
-                        buffer,
-                        originalName: fileData.name,
-                        mimeType: fileData.type || 'application/octet-stream',
-                        size: fileData.size || buffer.length
-                    });
-                }
-            }
-        }
-
-        // Call server function with attachments
-        const result = await replayTicket(ticketId, replyMessage, userId, attachments);
-        return {
-            success: true,
-            data: result,
-            message: 'Reply added successfully with attachments',
-            filesCount: attachments.length
-        };
-    } catch (error) {
-        console.error('Error adding reply with files:', error);
-        return {
-            success: false,
-            error: error.message || 'Failed to add reply'
-        };
-    }
-}
-
-export async function removeTicket(ticketId) {
-    try {
-        const result = await deleteTicketService(ticketId);
-        return {
-            success: true,
-            data: result,
-            message: 'Ticket deleted successfully'
-        };
-    } catch (error) {
-        console.error('Error deleting ticket:', error);
-        return {
-            success: false,
-            error: error.message || 'Failed to delete ticket'
-        };
-    }
-}
 
 export async function updateTicketStatus(ticketId, status) {
     try {
@@ -169,11 +113,11 @@ export async function fetchAgentTicketStats() {
     try {
         const tickets = await viewTickets();
         const stats = {
-            open: tickets.filter(t => t.status === 'Open').length,
-            inProgress: tickets.filter(t => t.status === 'In Progress').length,
-            pending: tickets.filter(t => t.status === 'Pending').length,
-            resolved: tickets.filter(t => t.status === 'Resolved').length,
-            closed: tickets.filter(t => t.status === 'Closed').length
+            [TICKET_STATUSES.OPEN]: tickets.filter(t => t.status === TICKET_STATUSES.OPEN).length,
+            [TICKET_STATUSES.IN_PROGRESS]: tickets.filter(t => t.status === TICKET_STATUSES.IN_PROGRESS).length,
+            [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: tickets.filter(t => t.status === TICKET_STATUSES.AWAITING_CUSTOMER_REPLY).length,
+            [TICKET_STATUSES.AWAITING_AGENT_REPLY]: tickets.filter(t => t.status === TICKET_STATUSES.AWAITING_AGENT_REPLY).length,
+            [TICKET_STATUSES.CLOSED]: tickets.filter(t => t.status === TICKET_STATUSES.CLOSED).length
         };
         return {
             success: true,
@@ -184,7 +128,7 @@ export async function fetchAgentTicketStats() {
         return {
             success: false,
             error: error.message || 'Failed to fetch ticket stats',
-            data: { open: 0, inProgress: 0, pending: 0, resolved: 0, closed: 0 }
+            data: { [TICKET_STATUSES.OPEN]: 0, [TICKET_STATUSES.IN_PROGRESS]: 0, [TICKET_STATUSES.AWAITING_CUSTOMER_REPLY]: 0, [TICKET_STATUSES.AWAITING_AGENT_REPLY]: 0, [TICKET_STATUSES.CLOSED]: 0 }
         };
     }
 }
@@ -195,7 +139,7 @@ export async function closeTicket(ticketId) {
             throw new Error('Ticket ID is required');
         }
 
-        const result = await updateStatus(ticketId, 'Closed');
+        const result = await updateStatus(ticketId, `${TICKET_STATUSES.CLOSED}`);
         return {
             success: true,
             data: result,
@@ -210,34 +154,13 @@ export async function closeTicket(ticketId) {
     }
 }
 
-export async function resolveTicket(ticketId) {
-    try {
-        if (!ticketId) {
-            throw new Error('Ticket ID is required');
-        }
-
-        const result = await updateStatus(ticketId, 'Resolved');
-        return {
-            success: true,
-            data: result,
-            message: 'Ticket resolved successfully'
-        };
-    } catch (error) {
-        console.error('Error resolving ticket:', error);
-        return {
-            success: false,
-            error: error.message || 'Failed to resolve ticket'
-        };
-    }
-}
-
 export async function startProgress(ticketId) {
     try {
         if (!ticketId) {
             throw new Error('Ticket ID is required');
         }
 
-        const result = await updateStatus(ticketId, 'In Progress');
+        const result = await updateStatus(ticketId, `${TICKET_STATUSES.IN_PROGRESS}`);
         return {
             success: true,
             data: result,
@@ -251,7 +174,7 @@ export async function startProgress(ticketId) {
         };
     }
 }
-
+/// we need to assign ticket to department not user id
 export async function assignTicket(ticketId, userId) {
     try {
         if (!ticketId || !userId) {
@@ -295,18 +218,9 @@ export async function fetchDepartmentUsers(departmentId) {
 }
 
 
-export async function deleteTicketAction(ticketId) {
+export async function updateTicketAction(ticketid, { category_id, urgency_id, dept_id }) {
     try {
-        const result = await deleteTicket(ticketId);
-        return { success: true, message: result.message };
-    } catch (error) {
-        console.error('Error deleting ticket:', error);
-        return { success: false, message: error.message };
-    }
-}
-export async function updateTicketAction(ticketid,{ subject, description, category_id, urgency_id, dept_id }){
-    try {
-        const result = await updateTicket(ticketid,{ subject, description, category_id, urgency_id, dept_id });
+        const result = await updateTicket(ticketid,{ category_id, urgency_id, dept_id });
         return { success: true, data: result };
     } catch (error) {
         console.error('Error updating ticket:', error);

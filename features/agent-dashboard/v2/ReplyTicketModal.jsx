@@ -1,24 +1,18 @@
 "use client"
 import React, { useState } from 'react'
-import { X, Send, AlertCircle, Upload, File, Trash2 } from 'lucide-react'
+import { X, Send, AlertCircle } from 'lucide-react'
 import { useAgentState } from './AgentProvider'
-import { submitReplyWithFiles } from './action'
+import { submitReply,updateTicketStatus } from './action'
 
 export default function ReplyTicketModal({ ticket, onClose }) {
-  const { addReply } = useAgentState()
+  const {updateTicket } = useAgentState()
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [attachedFiles, setAttachedFiles] = useState([])
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files || [])
-    setAttachedFiles(prev => [...prev, ...files])
-  }
-
-  const removeFile = (index) => {
-    setAttachedFiles(prev => prev.filter((_, i) => i !== index))
-  }
+  const { 
+      openModal, 
+      closeModal, 
+    } = useAgentState()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,38 +21,24 @@ export default function ReplyTicketModal({ ticket, onClose }) {
     setError('')
     setLoading(true)
     try {
-      // Convert files to base64 for serialization
-      const filesData = [];
-      for (const file of attachedFiles) {
-        const arrayBuffer = await file.arrayBuffer();
-        const uint8Array = new Uint8Array(arrayBuffer);
-        const binaryString = String.fromCharCode(...uint8Array);
-        const base64String = btoa(binaryString);
-        
-        filesData.push({
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          data: base64String
-        });
+      const userInfo = localStorage.getItem('user');
+      const parsedUser = JSON.parse(userInfo);
+      if(!parsedUser){
+        throw new Error('User not found. Please log in again.')
       }
-
-      const result = await submitReplyWithFiles(ticket.ticket_id, message, 1, filesData) // TODO: Get userId from session/auth context
+                     await updateTicketStatus(ticket.ticket_id, 'Awaiting Customer Reply');
+      const result = await submitReply(ticket.ticket_id, message, parsedUser.id) // TODO: Get userId from session/auth context  
       
       if (!result.success) {
         throw new Error(result.error || 'Failed to send reply')
       }
+      // Optionally, update ticket status to 'Awaiting Customer Reply' after agent reply
+      const updatedData = { status: 'Awaiting Customer Reply' }
+      await updateTicket(ticket.ticket_id, updatedData);
 
-      addReply(ticket.ticket_id, {
-        message,
-        createdAt: new Date().toISOString(),
-        userId: 1,
-        files: attachedFiles.map(f => f.name),
-        attachmentCount: attachedFiles.length
-      })
       setMessage('')
-      setAttachedFiles([])
       onClose()
+      closeModal();
     } catch (error) {
       console.error('Error sending reply:', error)
       setError(error.message || 'Failed to send reply. Please try again.')
@@ -77,7 +57,10 @@ export default function ReplyTicketModal({ ticket, onClose }) {
             <p className="text-sm text-gray-600 mt-1">{ticket.subject}</p>
           </div>
           <button
-            onClick={onClose}
+            onClick={()=>{
+               onClose()
+
+            }}
             className="text-gray-400 hover:text-gray-600 transition p-1"
             disabled={loading}
           >
@@ -105,52 +88,6 @@ export default function ReplyTicketModal({ ticket, onClose }) {
               disabled={loading}
             />
           </div>
-
-          {/* File Upload Section */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Attachments</label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition">
-              <input
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                disabled={loading}
-                className="hidden"
-                id="file-input"
-              />
-              <label htmlFor="file-input" className="cursor-pointer">
-                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm text-gray-600">Click to upload files or drag and drop</p>
-                <p className="text-xs text-gray-500 mt-1">PNG, JPG, PDF up to 10MB</p>
-              </label>
-            </div>
-          </div>
-
-          {/* Attached Files List */}
-          {attachedFiles.length > 0 && (
-            <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-sm font-medium text-gray-700 mb-3">Attached Files ({attachedFiles.length})</p>
-              <div className="space-y-2">
-                {attachedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between bg-white p-3 rounded border border-gray-200">
-                    <div className="flex items-center gap-2">
-                      <File className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700 truncate">{file.name}</span>
-                      <span className="text-xs text-gray-500">({(file.size / 1024).toFixed(2)} KB)</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeFile(index)}
-                      className="text-red-600 hover:text-red-700 transition"
-                      disabled={loading}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Footer */}
           <div className="flex gap-3 pt-4">

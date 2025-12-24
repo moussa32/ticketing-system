@@ -3,6 +3,7 @@ import { useState,useTransition } from "react";
 import { deleteTicketAction } from "../actions/action.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import{ TICKET_STATUSES } from '../../../../app/constants/constants.js';
 
 export default function TicketTableHTML({ ticketsList }) {
 
@@ -95,10 +96,11 @@ export default function TicketTableHTML({ ticketsList }) {
           className="border p-2 rounded w-60"
         >
           <option value="all">All</option>
-          <option value="Opened">Opened</option>
-          <option value="In Progress">In-Progress</option>
-          <option value="Awaiting your reply">Awaiting your reply</option>
-          <option value="Closed">Closed</option>
+          <option value={TICKET_STATUSES.OPEN}>{TICKET_STATUSES.OPEN}</option>
+          <option value={TICKET_STATUSES.IN_PROGRESS}>{TICKET_STATUSES.IN_PROGRESS}</option>
+          <option value={TICKET_STATUSES.AWAITING_CUSTOMER_REPLY}>{TICKET_STATUSES.AWAITING_CUSTOMER_REPLY}</option>
+          <option value={TICKET_STATUSES.AWAITING_AGENT_REPLY}>{TICKET_STATUSES.AWAITING_AGENT_REPLY}</option>
+          <option value={TICKET_STATUSES.CLOSED}>{TICKET_STATUSES.CLOSED}</option>
         </select>
 
         <input
