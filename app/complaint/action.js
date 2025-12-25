@@ -6,7 +6,7 @@ export async function submitComplaint(formData) {
         const complaint = formData.get("complaint");
         console.log("Submitting complaint...", { ticketID, complaint });
 
-        const userId="1"; // Replace with actual user ID retrieval logic
+        const userId= formData.get("userId");
         await addComplaint(userId, ticketID, complaint);   
         return { ok: true, message: `Complaint for Ticket #${ticketID} submitted successfully!` };
     } catch (error) {

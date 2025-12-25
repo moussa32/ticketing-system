@@ -9,7 +9,7 @@ export async function submitSurvey(formData) {
         const feedback=formData.get("comments");
         
         console.log("Submitting survey...", { rate, satisfaction, feedback });
-        const userId="1"; // Replace with actual user ID retrieval logic
+        const userId= formData.get("userId");
         await addSurvey(rate, satisfaction, feedback, userId);
             return { ok: true, message: `Survey submitted successfully!` };
     } catch (error) {

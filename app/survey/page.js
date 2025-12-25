@@ -1,11 +1,22 @@
 "use client";
 import toast from "react-hot-toast";
 import { submitSurvey } from "./action";
+import { useRouter } from "next/navigation";
+import { useEffect ,useState} from "react";``
 
 export default function Survey() {
-
+const route = useRouter();
+      const [user, setUser] = useState(null);
+    
+      useEffect(() => {
+         const userInfo = localStorage.getItem('user');
+        const parsedUser = JSON.parse(userInfo);
+        if(parsedUser)
+          setUser(parsedUser);
+      }, []);
 
     async function submit(formData) {
+        formData.append("userId", user?.id);
         const res = await submitSurvey(formData);
         if (res.ok) {
             toast.success(res.message);
