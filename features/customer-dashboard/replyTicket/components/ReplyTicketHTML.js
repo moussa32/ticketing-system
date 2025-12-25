@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { replyTicket, fetchTicketDetails } from "../actions/action";
+import { replyTicket, fetchTicketDetails,deleteTicketAction } from "../actions/action";
 import { useRouter } from "next/navigation";
 import { TICKET_STATUSES } from "@/app/constants/constants";
 
@@ -51,7 +51,22 @@ export default function ReplyTicketHTML({ replyMessages }) {
     }
   }
 
-  console.log("Rendering ReplyTicketHTML with ticket:", ticket);
+  async function handleDeleteTicket(ticketId){
+    if (!confirm("Are you sure you want to delete this ticket?")) return;
+
+    async () => {
+      const res =await deleteTicketAction(ticketId);
+    if (res.ok) {
+      toast.success(res.message);
+      setTimeout(() => {
+         window.location.reload();
+      }, 2000);
+    }
+    else toast.error(res.message);
+    };
+   
+  } 
+
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -146,6 +161,7 @@ export default function ReplyTicketHTML({ replyMessages }) {
 
                 <div className="flex gap-4">
                   <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">Submit Reply</button>
+                  {TICKET_STATUSES.OPEN === status && (<button type="button" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-gray-400 cursor-pointer" onClick={() => handleDeleteTicket(ticketId)}>Delete</button>)}
                   <button type="button" className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 cursor-pointer" onClick={() => route.push('/dashboard/customer/viewTicket/')}>Cancel</button>
                 </div>
               </form>

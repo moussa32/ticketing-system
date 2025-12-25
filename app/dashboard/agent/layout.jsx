@@ -1,11 +1,10 @@
-// <<<<<<< HEAD
+
 'use client';
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/useAuth';
 import AgentNavbar from "@/components/AgentNavbar";
-import AgentSidebar from "@/components/AgentSidebar";
 const ROLES = {
   AGENT: 'agent',
 };

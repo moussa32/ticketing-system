@@ -1,10 +1,9 @@
 'use client'
 import { useState,useTransition } from "react";
-import { deleteTicketAction } from "../actions/action.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import{ TICKET_STATUSES } from '../../../../app/constants/constants.js';
-
+ 
 export default function TicketTableHTML({ ticketsList }) {
 
   const [filterStatus, setfilterStatus] = useState("all")
@@ -44,24 +43,6 @@ export default function TicketTableHTML({ ticketsList }) {
        sessionStorage.setItem("selectedticket", JSON.stringify(selectedTicketObj));
        location.href=`/dashboard/customer/replyTicket/${ticketId}`; 
     }
-  const handleReplyTicket=()=>{ location.href="/dashboard/customer/replyTicket" }
-
- const handleDeleteTicket=async(ticketId)=>{
-    if (!confirm("Are you sure you want to delete this ticket?")) return;
-
-    startTransition(async () => {
-      const res =await deleteTicketAction(ticketId);
-    if (res.ok) {
-      toast.success(res.message);
-      setTimeout(() => {
-         window.location.reload();
-      }, 2000);
-    }
-    else toast.error(res.message);
-    });
-   
-  } 
-
 
 
   return (
@@ -124,7 +105,7 @@ export default function TicketTableHTML({ ticketsList }) {
               <th className="p-3 text-left">Priority</th>
               <th className="p-3 text-left">Status</th>
               <th className="p-3 text-left">Created At</th>
-              <th className="p-3 text-center">Actions</th>
+              
             </tr>
           </thead>
 
@@ -139,17 +120,12 @@ export default function TicketTableHTML({ ticketsList }) {
               filtered.map((data) => (
                 <tr key={data.ticketno} className="hover:bg-gray-50 transition">
                   <td className="p-3">{data.ticketno}</td>
-                  <td className="p-3">{data.subject}</td>
+                  <td className="p-3"><a href="#" onClick={()=>handleViewTicket(data)} className="text-blue-600 hover:underline">{data.subject}</a></td>
                   <td className="p-3">{data.departmentname}</td>
                   <td className="p-3">{data.categoryname}</td>
                   <td className={`p-3 ${getPriorityColor(data.pirority || data.priority)}`}>{data.priority}</td>
                   <td className="p-3">{data.status}</td>
                   <td className="p-3">{data.createdat}</td>
-                  <td className="p-3 flex gap-2 justify-center">
-                    <button onClick={()=>handleViewTicket(data)} className="border px-2 py-1 rounded hover:bg-gray-100">View</button>
-                    <button onClick={()=>handleViewTicket(data)} className="border px-2 py-1 rounded bg-gray-200 hover:bg-gray-300">Reply</button>
-                    <button onClick={()=>handleDeleteTicket(data.ticketno)} className="border px-2 py-1 rounded bg-red-500 text-white hover:bg-red-600">{isPending ? "Deleting..." : "Delete"}</button>
-                  </td>
                 </tr>
               ))
             )}

@@ -1,6 +1,5 @@
 "use server"
-
-import {replyToTicket,getTicketDetails} from '../../../../lib/services/CustomerTicketService.js';
+import {replyToTicket,getTicketDetails,deleteTicketWithAttachment} from '../../../../lib/services/CustomerTicketService.js';
 import fs from "fs";
 import path from "path";
 
@@ -44,4 +43,14 @@ export async function fetchTicketDetails(ticketId) {
     } catch (error) {
         return { ok: false, message: "Failed to fetch ticket details" };
     }       
+}
+
+
+export async function deleteTicketAction(ticketId) {
+    try {
+        await deleteTicketWithAttachment(ticketId);
+        return { ok: true, message: "Ticket deleted successfully." };
+    } catch (error) {
+        return { ok: false, message: "Failed to delete ticket." };
+    }   
 }

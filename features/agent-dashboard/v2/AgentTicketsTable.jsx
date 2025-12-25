@@ -68,10 +68,6 @@ export default function AgentTicketsTable() {
     )
   }
 
-  const handleDelete = (ticketId) => {
-    deleteTicket(ticketId)
-    closeModal()
-  }
 
   // Filter and sort tickets
   const filteredTickets = useMemo(() => {
