@@ -43,7 +43,7 @@ async function handleSubmit(formData) {
               Department <span className="text-red-500">*</span>
             </label>
             <select name="department"
-              className="border rounded-md p-2"
+              className="border rounded-md p-2" required
             >
               <option value="">Select Department</option>
               {departments.map((dept)=> (
@@ -60,7 +60,7 @@ async function handleSubmit(formData) {
               Category <span className="text-red-500">*</span>
             </label>
             <select name="category"
-              className="border rounded-md p-2"
+              className="border rounded-md p-2" required
             >
               <option value="">Select Category</option>
               {categories.map((cat)=> (
@@ -82,7 +82,7 @@ async function handleSubmit(formData) {
             <input
               type="text" name="subject"
               placeholder="Enter the subject of your ticket"
-              className="border rounded-md p-2 w-full"
+              className="border rounded-md p-2 w-full" required
             />
           </div>
 
@@ -94,7 +94,7 @@ async function handleSubmit(formData) {
             <textarea
               name="description"
               placeholder="Write your ticket description..."
-              className="border rounded-md p-3 w-full h-32"
+              className="border rounded-md p-3 w-full h-32" required
             />
           </div>
 
@@ -105,7 +105,13 @@ async function handleSubmit(formData) {
               type="file" name="attachment"
               className="border rounded-md p-2"
             />
+            {/* Disclaimer */}
+            <p className="text-xs text-gray-500 mt-1">
+              Max size: <span className="font-semibold">5MB</span> — Allowed types:
+              <span className="font-semibold"> PNG, JPG, JPEG, PDF, ZIP</span>.
+            </p>
           </div>
+
         <div className="flex gap-4">
           <button
             type="submit"

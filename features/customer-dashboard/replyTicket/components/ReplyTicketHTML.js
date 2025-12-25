@@ -40,8 +40,7 @@ export default function ReplyTicketHTML({ replyMessages }) {
       setTicket(ticketDetails.data);
       sessionStorage.setItem("selectedticket", JSON.stringify(ticketDetails.data));
     }
-
-    setStatus(TICKET_STATUSES.AWAITING_AGENT_REPLY);
+     ticketDetails.data.status===TICKET_STATUSES.OPEN ? setStatus(TICKET_STATUSES.OPEN) : setStatus(TICKET_STATUSES.AWAITING_AGENT_REPLY);
 
     if (res.ok) {
       toast.success(res.message);
@@ -51,20 +50,18 @@ export default function ReplyTicketHTML({ replyMessages }) {
     }
   }
 
-  async function handleDeleteTicket(ticketId){
+  async function handleDeleteTicket(ticket){
     if (!confirm("Are you sure you want to delete this ticket?")) return;
 
-    async () => {
-      const res =await deleteTicketAction(ticketId);
+      const res =await deleteTicketAction(ticket);
     if (res.ok) {
       toast.success(res.message);
       setTimeout(() => {
-         window.location.reload();
-      }, 2000);
+        route.push('/dashboard/customer/viewTicket/');
+      }, 500);
     }
     else toast.error(res.message);
-    };
-   
+    
   } 
 
 
@@ -88,12 +85,7 @@ export default function ReplyTicketHTML({ replyMessages }) {
   {ticket.attachurl ? (
   <p className="text-md">
     <span className="font-medium">Attachments:</span>
-    <a
-      href={`/tickets/${ticket.attachurl}`}
-      target="_blank"
-      className="text-sm underline mt-2 block text-blue-700"
-    >
-      {ticket.attachurl || "View Attachment"}
+    <a href={`${ticket.attachurl}`} target="_blank" className="p-2 underline mt-6 text-blue-700">{"View Attachment"}
     </a>
   </p>
 ) : (
@@ -126,8 +118,8 @@ export default function ReplyTicketHTML({ replyMessages }) {
 
                         {/* ATTACHMENT */}
                         {msg.url && (
-                          <a href={`/public/tickets/${msg.url}`} target="_blank" className="text-sm underline mt-2 block text-blue-700">
-                            📎 {msg.url || "View Attachment"}
+                          <a href={`${msg.url}`} target="_blank" className="text-sm underline mt-2 block text-blue-700">
+                             {"View Attachment"}
                           </a>
                         )}
                       </div>
@@ -147,21 +139,26 @@ export default function ReplyTicketHTML({ replyMessages }) {
               <form action={handleSubmitReply} className="space-y-6 p-4 bg-white shadow rounded-md">
                 <input type="hidden" name="ticketId" value={ticketId} />
                 <input type="hidden" name="userId" value={user?.id} />
-                <input type="hidden" name="status" value={TICKET_STATUSES.AWAITING_AGENT_REPLY} />
+                <input type="hidden" name="status" value={status} />
 
                 <div>
                   <label className="mb-1 font-medium">Your Reply <span className="text-red-500">*</span></label>
-                  <textarea name="replyMessage" className="border rounded-md p-2 h-32 w-full" placeholder="Write your reply..."></textarea>
+                  <textarea name="replyMessage" className="border rounded-md p-2 h-32 w-full" placeholder="Write your reply..." required></textarea>
                 </div>
 
                 <div>
                   <label className="mb-1 font-medium">Attachment (optional)</label>
                   <input name="file" type="file" className="border rounded-md p-2 w-full" />
+                  {/* Disclaimer */}
+                  <p className="text-xs text-gray-500 mt-1">
+                    Max size: <span className="font-semibold">5MB</span> — Allowed types:
+                    <span className="font-semibold"> PNG, JPG, JPEG, PDF, ZIP</span>.
+                  </p>
                 </div>
 
                 <div className="flex gap-4">
                   <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">Submit Reply</button>
-                  {TICKET_STATUSES.OPEN === status && (<button type="button" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-gray-400 cursor-pointer" onClick={() => handleDeleteTicket(ticketId)}>Delete</button>)}
+                  {TICKET_STATUSES.OPEN === status && (<button type="button" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-gray-400 cursor-pointer" onClick={() => handleDeleteTicket(ticket)}>Delete</button>)}
                   <button type="button" className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 cursor-pointer" onClick={() => route.push('/dashboard/customer/viewTicket/')}>Cancel</button>
                 </div>
               </form>

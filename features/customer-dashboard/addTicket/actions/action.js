@@ -1,9 +1,8 @@
 "use server"
 
 import {addTicket} from '../../../../lib/services/CustomerTicketService.js';
-import fs from "fs";
-import path from "path";
 import { TICKET_STATUSES } from '../../../../app/constants/constants.js';
+import {uploadFile,isValidFileType,isValidFileSize} from '../../../../lib/services/fileService.js';
 
 // the below method handles the form submission
 export async function saveTicket(formData) {
@@ -14,16 +13,21 @@ export async function saveTicket(formData) {
             const description = formData.get("description");
             const department = formData.get("department");
 
-            console.log("Saving ticket...", { subject, department, description })
-
             const [catId,urgencyId]=category.split(",");
             const status=TICKET_STATUSES.OPEN;
             // Handle attachment
-    const file = formData.get("attachment");
-  // upload file
-    const filename = await uploadFile(file);
+            const file = formData.get("attachment");
+           // upload file
+            const filename = await uploadFile(file);
 
-    const ticketNo = await addTicket(subject,description,status,department,catId,urgencyId,userId,filename);
+          if(!isValidFileSize(file)) {
+            return { ok: false, message: "Attachment size exceeds the 5MB limit." };
+          }if(!isValidFileType(file)) {
+            return { ok: false, message: "Invalid attachment type. Only JPG, PNG, PDF, and ZIP are allowed." };
+          }
+          const fileUrl = filename ? `/tickets/${filename}` : null;
+              
+          const ticketNo = await addTicket(subject,description,status,department,catId,urgencyId,userId,fileUrl);
 
      return { ok: true, message: `Ticket #${ticketNo} submitted successfully!` };
 
@@ -33,20 +37,4 @@ export async function saveTicket(formData) {
     }
   }
 
-  async function uploadFile(file) {
-    let filename = null;
-
-    if (file && file.size > 0) {
-      // Ensure the folder exists
-      const uploadDir = path.join(process.cwd(), "public", "tickets");
-      if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-
-      // Save file with unique name
-      filename = `${Date.now()}_${file.name}`;
-      const filePath = path.join(uploadDir, filename);
-      const buffer = Buffer.from(await file.arrayBuffer());
-      fs.writeFileSync(filePath, buffer);
-    }
-
-    return filename;
-  }
+  

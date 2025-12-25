@@ -2,6 +2,8 @@
 import {replyToTicket,getTicketDetails,deleteTicketWithAttachment} from '../../../../lib/services/CustomerTicketService.js';
 import fs from "fs";
 import path from "path";
+import {uploadFile,deleteFile,isValidFileSize,isValidFileType} from '../../../../lib/services/fileService.js';
+import { TICKET_STATUSES } from '../../../../app/constants/constants.js';
 
 export async function replyTicket(formData) {
     try {
@@ -9,28 +11,24 @@ export async function replyTicket(formData) {
      
             const ticketId = formData.get("ticketId");
             const replyMessage = formData.get("replyMessage"); 
-            const status=formData.get("status");
+            const status=(formData.get("status")===TICKET_STATUSES.OPEN) ? TICKET_STATUSES.OPEN : TICKET_STATUSES.AWAITING_AGENT_REPLY;
             const userId=formData.get("userId");
             const file = formData.get("file"); // Get the uploaded file
 
-            let filename = null;
+            // upload file
+                        const filename = await uploadFile(file);
             
-                if (file && file.size > 0) {
-                  // Ensure the folder exists
-                  const uploadDir = path.join(process.cwd(), "public", "attachments", "customer");
-                  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-            
-                  // Save file with unique name
-                  filename = `${Date.now()}_${file.name}`;
-                  const filePath = path.join(uploadDir, filename);
-                  const buffer = Buffer.from(await file.arrayBuffer());
-                  fs.writeFileSync(filePath, buffer);
-                }
-            
-
-            await replyToTicket(ticketId,replyMessage,status,userId,filename);  
-            return { ok: true, message: `Reply submitted successfully!` };
+                      if(!isValidFileSize(file)) {
+                        return { ok: false, message: "Attachment size exceeds the 5MB limit." };
+                      }if(!isValidFileType(file)) {
+                        return { ok: false, message: "Invalid attachment type. Only JPG, PNG, PDF, and ZIP are allowed." };
+                      }
+                      const fileUrl = filename ? `/tickets/${filename}` : null;
+                 await replyToTicket(ticketId,replyMessage,status,userId,fileUrl);  
+                  return { ok: true, message: `Reply submitted successfully!` };
+                
     }catch (error) {
+        console.error("Error submitting reply:", error);
           return { ok: false, message: "Failed to submit reply" };
     }       
 }
@@ -46,11 +44,17 @@ export async function fetchTicketDetails(ticketId) {
 }
 
 
-export async function deleteTicketAction(ticketId) {
+export async function deleteTicketAction(ticket) {
     try {
-        await deleteTicketWithAttachment(ticketId);
+        console.log("Deleting ticket:", ticket);
+        const results = await Promise.allSettled([ 
+              deleteTicketWithAttachment(ticket),
+              deleteFile(ticket)
+        ]);
+        console.log("Deletion results:", results);
         return { ok: true, message: "Ticket deleted successfully." };
     } catch (error) {
+        console.error("Error deleting ticket:", error);
         return { ok: false, message: "Failed to delete ticket." };
     }   
 }
