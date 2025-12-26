@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState,useEffect  } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,13 +20,26 @@ import {
 
 export default function EditUserModal({ isOpen, onClose, user, onSave }) {
   const [formData, setFormData] = useState({
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
+    firstName: user?.first_name || '',
+    lastName: user?.last_name || '',
     email: user?.email || '',
-    role: user?.role || 'customer',
+    roleId: user?.Role.role_id || '1',
     password: '',
-    isActive: user?.isActive ?? true
+    isActive: user?.status === "Active" || false,
+    }); 
+
+useEffect(() => {
+  if (!user) return;
+
+  setFormData({
+    firstName: user.first_name || "",
+    lastName: user.last_name || "",
+    email: user.email || "",
+    roleId: user.Role?.role_id?.toString() || "customer",
+    password: "",
+    isActive: user?.status === "Active" || false,
   });
+}, [user]);
   
   const [isLoading, setIsLoading] = useState(false);
   
@@ -41,7 +54,7 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
   const handleRoleChange = (value) => {
     setFormData(prev => ({
       ...prev,
-      role: value
+      roleId: value
     }));
   };
   
@@ -50,7 +63,7 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
     setIsLoading(true);
     
     try {
-      await onSave(user.id, formData);
+      await onSave(user.user_id, formData);
       onClose();
     } catch (error) {
       console.error('Error saving user:', error);
@@ -106,14 +119,14 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
           
           <div className="space-y-2">
             <Label htmlFor="role">Role</Label>
-            <Select value={formData.role} onValueChange={handleRoleChange}>
+            <Select value={formData.roleId} onValueChange={handleRoleChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="customer">Customer</SelectItem>
-                <SelectItem value="agent">Agent</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="3">Customer</SelectItem>
+                <SelectItem value="2">Agent</SelectItem>
+                <SelectItem value="1">Admin</SelectItem>
               </SelectContent>
             </Select>
           </div>

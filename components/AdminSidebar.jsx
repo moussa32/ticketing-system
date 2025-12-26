@@ -6,11 +6,6 @@ import { Users, Ticket, FolderOpen, Building2, UserCircle } from 'lucide-react';
 
 const menuItems = [
   {
-    name: 'Customers',
-    href: '/dashboard/admin/customers',
-    icon: UserCircle
-  },
-  {
     name: 'Users',
     href: '/dashboard/admin/users',
     icon: Users

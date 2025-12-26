@@ -4,6 +4,7 @@ import { getAllUsers } from '@/features/admin-dashboard/users/actions/userAction
 export default async function UsersPage() {
   // Fetch users using server components
   const users = await getAllUsers();
+  console.log("users:",users);
 
   return (
     <div>

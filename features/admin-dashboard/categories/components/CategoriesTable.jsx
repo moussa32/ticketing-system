@@ -30,11 +30,9 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-b border-gray-100">
-              <TableHead className="pl-6">ID</TableHead>
+              <TableHead className="pl-5">ID</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
               <TableHead>Urgency</TableHead>
-              <TableHead>Created At</TableHead>
               <TableHead className="text-right pr-6">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -50,23 +48,18 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
               </TableRow>
             ) : (
               categories.map((category) => {
-                const urgencyName = category.urgency
-                  ? category.urgency.urgency_name
-                  : "Unknown";
+                const urgencyName = category.Urgency?.urgency_name ?? "Unknown";
                 const urgencyBadge = getUrgencyBadge(urgencyName);
                 return (
                   <TableRow
-                    key={category.id}
+                    key={category.category_id}
                     className="hover:bg-gray-50 border-b border-gray-100 last:border-0"
                   >
                     <TableCell className="font-mono text-gray-500 pl-6">
-                      #{category.id}
+                      #{category.category_id}
                     </TableCell>
                     <TableCell className="font-medium text-gray-900">
-                      {category.name}
-                    </TableCell>
-                    <TableCell className="text-gray-500">
-                      {category.description || "-"}
+                      {category.category_name}
                     </TableCell>
                     <TableCell>
                       <span
@@ -75,10 +68,7 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
                         {urgencyBadge.label}
                       </span>
                     </TableCell>
-                    <TableCell className="text-sm text-gray-500">
-                      {new Date(category.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-right pr-6">
+                    <TableCell className="text-right pr-5">
                       <div className="flex items-center justify-end gap-2">
                         <Button
                           variant="ghost"
@@ -91,7 +81,7 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => onDelete(category.id)}
+                          onClick={() => onDelete(category.category_id)}
                           className="h-8 w-8 text-gray-500 hover:text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="w-4 h-4" />

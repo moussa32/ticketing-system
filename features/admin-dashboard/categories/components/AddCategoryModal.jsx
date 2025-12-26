@@ -38,7 +38,6 @@ export default function AddCategoryModal({
 }) {
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
     urgencyId: "",
   });
   const [urgencies, setUrgencies] = useState([]);
@@ -67,12 +66,13 @@ export default function AddCategoryModal({
   }, []);
 
   useEffect(() => {
+    if (!urgencies.length) return;
+    
     if (initialData) {
       setFormData({
-        name: initialData.name || "",
-        description: initialData.description || "",
-        urgencyId: initialData.urgencyId
-          ? initialData.urgencyId.toString()
+        name: initialData.category_name || "",
+        urgencyId: initialData.urgency_id
+          ? initialData.urgency_id.toString()
           : urgencies.length > 0
           ? urgencies[0].urgency_id.toString()
           : "",
@@ -80,7 +80,6 @@ export default function AddCategoryModal({
     } else {
       setFormData((prev) => ({
         name: "",
-        description: "",
         urgencyId:
           urgencies.length > 0 ? urgencies[0].urgency_id.toString() : "",
       }));
@@ -118,18 +117,6 @@ export default function AddCategoryModal({
               }
               placeholder="e.g. Hardware"
               required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              placeholder="Category description..."
-              rows={3}
             />
           </div>
           <div className="space-y-2">

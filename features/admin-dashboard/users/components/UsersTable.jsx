@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import UserActionsDropdown from './UserActionsDropdown';
 import EditUserModal from './EditUserModal';
 
-export default function UsersTable({ users, onUserUpdate }) {
+export default function UsersTable({ users = []  }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   
@@ -24,33 +24,20 @@ export default function UsersTable({ users, onUserUpdate }) {
   };
   
   const handleResetPassword = async (user) => {
-    if (confirm(`Reset password for ${user.firstName} ${user.lastName}?`)) {
+    if (confirm(`Reset password for ${user.first_name} ${user.last_name}?`)) {
       // TODO: Implement reset password logic
       alert('Password reset functionality will be implemented with server actions');
     }
   };
   
-  const handleLogoutUser = async (user) => {
-    if (confirm(`Logout ${user.firstName} ${user.lastName}?`)) {
-      // TODO: Implement logout user logic
-      alert('Logout user functionality will be implemented with server actions');
-    }
-  };
-  
-  const handleLogoutAll = async (user) => {
-    if (confirm(`Logout all sessions for ${user.firstName} ${user.lastName}?`)) {
-      // TODO: Implement logout all sessions logic
-      alert('Logout all sessions functionality will be implemented with server actions');
-    }
-  };
   
   const handleSaveUser = async (userId, formData) => {
     // TODO: Implement save user logic with server actions
     console.log('Saving user:', userId, formData);
     alert('Save user functionality will be implemented with server actions');
-    if (onUserUpdate) {
+    /*if (onUserUpdate) {
       onUserUpdate();
-    }
+    }*/
   };
   
   const getRoleBadge = (role) => {
@@ -81,53 +68,47 @@ export default function UsersTable({ users, onUserUpdate }) {
                 <TableHead className="pl-6">User</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Joined</TableHead>
                 <TableHead className="text-right pr-6">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-12 text-muted-foreground">
+                  <TableCell colSpan={4} className="text-center py-12 text-muted-foreground">
                     No users available
                   </TableCell>
                 </TableRow>
               ) : (
                 users.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-gray-50 border-b border-gray-100 last:border-0">
+                  <TableRow key={user.user_id} className="hover:bg-gray-50 border-b border-gray-100 last:border-0">
                     <TableCell className="pl-6">
                       <div className="flex items-center gap-3">
                         <Avatar className="w-8 h-8">
                           <AvatarFallback className="bg-indigo-100 text-indigo-700 font-medium text-sm">
-                            {user.firstName[0]}{user.lastName[0]}
+                            {user.first_name}{user.last_name}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium text-gray-900">{user.firstName} {user.lastName}</p>
+                          <p className="font-medium text-gray-900">{user.first_name} {user.last_name}</p>
                           <p className="text-sm text-gray-500">{user.email}</p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{getRoleBadge(user.role)}</TableCell>
+                    <TableCell>{getRoleBadge(user.Role.role_name)}</TableCell>
                     <TableCell>
                       <Badge className={`font-medium border shadow-none ${
-                        user.isActive 
+                        user.status === "Active"
                           ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-50/80' 
                           : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-50/80'
                       }`}>
-                        {user.isActive ? 'Active' : 'Inactive'}
+                        {user.status === "Active" ? 'Active' : 'Inactive'}
                       </Badge>
-                    </TableCell>
-                    <TableCell className="text-sm text-gray-500">
-                      {new Date(user.createdAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-right pr-6">
                       <UserActionsDropdown
                         user={user}
                         onEdit={handleEdit}
                         onResetPassword={handleResetPassword}
-                        onLogoutUser={handleLogoutUser}
-                        onLogoutAll={handleLogoutAll}
                       />
                     </TableCell>
                   </TableRow>

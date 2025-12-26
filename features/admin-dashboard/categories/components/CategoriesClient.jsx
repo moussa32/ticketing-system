@@ -30,10 +30,10 @@ export default function CategoriesClient({ initialCategories }) {
     setIsLoading(true);
     try {
       let result;
-      
+      console.log('Saving category with data:', data, 'Editing category:', editingCategory);
       if (editingCategory) {
         // Update existing category
-        result = await updateCategory(editingCategory.id, data);
+        result = await updateCategory(editingCategory.category_id, data);
       } else {
         // Create new category
         result = await createCategory(data);
@@ -45,7 +45,7 @@ export default function CategoriesClient({ initialCategories }) {
         // Optimistic update
         if (editingCategory) {
           setCategories(categories.map(cat => 
-            cat.id === editingCategory.id ? result.data : cat
+            cat.category_id === editingCategory.category_id ? result.data : cat
           ));
         } else {
           setCategories([result.data, ...categories]);
@@ -78,7 +78,7 @@ export default function CategoriesClient({ initialCategories }) {
         toast.success(result.message);
         
         // Optimistic update
-        setCategories(categories.filter(cat => cat.id !== id));
+        setCategories(categories.filter(cat => cat.category_id !== id));
         
         router.refresh();
       } else {
