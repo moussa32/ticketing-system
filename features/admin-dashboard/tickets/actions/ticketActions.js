@@ -102,7 +102,7 @@ export async function getAllTickets() {
       ],
       order: [["created_at", "DESC"]],
     });
-    console.log('Fetched Tickets:', JSON.parse(JSON.stringify(tickets)));
+
     return JSON.parse(JSON.stringify(tickets));
   } catch (error) {
     console.error("Error fetching tickets:", error);
