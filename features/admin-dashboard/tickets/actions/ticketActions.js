@@ -1,6 +1,6 @@
 "use server";
 
-import { Users, Ticket, Category, Urgency } from "@/lib/database";
+import { Users, Ticket, Category, Urgency,UserDepartment,Department } from "@/lib/database";
 import { TICKET_STATUSES } from '../../../../app/constants/constants.js';
 
 
@@ -9,7 +9,7 @@ export async function getTicketStats() {
     const stats = await Ticket.findAll({
       attributes: [
         "status",
-        [Ticket.sequelize.fn("COUNT", Ticket.sequelize.col("id")), "count"],
+        [Ticket.sequelize.fn("COUNT", Ticket.sequelize.col("ticket_id")), "count"],
       ],
       group: ["status"],
     });
@@ -62,29 +62,52 @@ export async function getAllTickets() {
   try {
     const tickets = await Ticket.findAll({
       include: [
+
+        // Ticket creator
         {
           model: Users,
-          as: "user",
-          attributes: ["id", "firstName", "lastName", "email"],
-          required: true,
+          attributes: ["user_id", "first_name", "last_name", "email"],
         },
+
+        // Category + Urgency
         {
           model: Category,
-          as: "category",
+          attributes: ["category_id", "category_name"],
           include: [
             {
               model: Urgency,
-              as: "urgency",
+              attributes: ["urgency_id", "urgency_name", "duration"],
             },
           ],
         },
-      ],
-      order: [["createdAt", "DESC"]],
-    });
 
+        // Ticket’s assigned department AND users in that department
+        {
+          model: Department,
+          attributes: ["dept_id", "dept_name"],
+          include: [
+            {
+              model: Users,                       // THIS is the correct nested include
+              through: { attributes: [] },       // hides pivot columns
+              attributes: [
+                "user_id",
+                "first_name",
+                "last_name",
+                "email",
+              ],
+            },
+          ],
+        },
+
+      ],
+      order: [["created_at", "DESC"]],
+    });
+    console.log('Fetched Tickets:', JSON.parse(JSON.stringify(tickets)));
     return JSON.parse(JSON.stringify(tickets));
   } catch (error) {
     console.error("Error fetching tickets:", error);
     return [];
   }
 }
+
+
