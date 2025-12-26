@@ -10,7 +10,8 @@
     "migration:create": "sequelize-cli migration:create --config lib/database/config/config.cjs --migrations-path lib/database/migrations",
     "migrate": "sequelize-cli db:migrate --config lib/database/config/config.cjs --migrations-path lib/database/migrations",
     "migrate:rollback": "sequelize-cli db:migrate:undo --config lib/database/config/config.cjs --migrations-path lib/database/migrations",
-    "migrate:rollback:all": "sequelize-cli db:migrate:undo:all --config lib/database/config/config.cjs --migrations-path lib/database/migrations"
+    "migrate:rollback:all": "sequelize-cli db:migrate:undo:all --config lib/database/config/config.cjs --migrations-path lib/database/migrations",
+    "seed": "node -r dotenv/config ./lib/database/seed.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

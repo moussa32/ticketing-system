@@ -1,4 +1,5 @@
 -- ROLES TABLE
+
 CREATE TABLE roles (
     role_id SERIAL PRIMARY KEY,
     role_name VARCHAR(100) NOT NULL CHECK (role_name IN ('Admin', 'Customer', 'Agent'))
@@ -101,7 +102,7 @@ CREATE TABLE ticket_attach (
     url VARCHAR(255) NOT NULL,
     ticket_id INTEGER NOT NULL,
 	reply_id INTEGER,
-    CONSTRAINT fk_attachment_ticket FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id)
+    CONSTRAINT fk_attachment_ticket FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id),
 	CONSTRAINT fk_attachment_reply FOREIGN KEY (reply_id) REFERENCES reply_tickets(id)
 );
 
@@ -114,10 +115,3 @@ CREATE TABLE customer_complaint (
     CONSTRAINT fk_support_user FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT fk_support_ticket FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id)
 );
-
-
-INSERT INTO urgency (urgency_name, duration) VALUES
-('Critical', 1),
-('High', 4),
-('Medium', 12),
-('Low', 24);
