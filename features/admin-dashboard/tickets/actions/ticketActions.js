@@ -1,13 +1,16 @@
 "use server";
 
-import { Users, Tickets, Categories, Urgency } from "@/lib/database";
+import { Users, Ticket, Category, Urgency } from "@/lib/database";
 
 export async function getTicketStats() {
   try {
-    const stats = await Tickets.findAll({
+    const stats = await Ticket.findAll({
       attributes: [
         "status",
-        [Tickets.sequelize.fn("COUNT", Tickets.sequelize.col("id")), "count"],
+        [
+          Ticket.sequelize.fn("COUNT", Ticket.sequelize.col("ticket_id")),
+          "count",
+        ],
       ],
       group: ["status"],
     });
@@ -58,32 +61,25 @@ export async function getTicketStats() {
 
 export async function getAllTickets() {
   try {
-    const tickets = await Tickets.findAll({
+    const tickets = await Ticket.findAll({
       include: [
         {
           model: Users,
-          as: "assignedAgent",
-          attributes: ["id", "firstName", "lastName", "email"],
-          required: false,
+          attributes: ["user_id", "first_name", "last_name", "email"],
         },
         {
-          model: Users,
-          as: "user",
-          attributes: ["id", "firstName", "lastName", "email"],
-          required: true,
-        },
-        {
-          model: Categories,
-          as: "category",
+          model: Category,
           include: [
             {
               model: Urgency,
-              as: "urgency",
             },
           ],
         },
+        {
+          model: Urgency,
+        },
       ],
-      order: [["createdAt", "DESC"]],
+      order: [["ticket_id", "DESC"]],
     });
 
     return JSON.parse(JSON.stringify(tickets));

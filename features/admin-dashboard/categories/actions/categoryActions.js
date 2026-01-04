@@ -1,19 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Categories, Urgency } from "@/lib/database";
+import { Category, Urgency } from "@/lib/database";
 
 export async function getAllCategories() {
   try {
-    const categories = await Categories.findAll({
+    const categories = await Category.findAll({
       include: [
         {
           model: Urgency,
-          as: "urgency",
           attributes: ["urgency_id", "urgency_name"],
         },
       ],
-      order: [["createdAt", "DESC"]],
+      order: [["category_id", "DESC"]],
     });
 
     return JSON.parse(JSON.stringify(categories));
@@ -43,8 +42,8 @@ export async function createCategory(data) {
       return { success: false, message: "Category name is required" };
     }
 
-    const existingCategory = await Categories.findOne({
-      where: { name: name.trim() },
+    const existingCategory = await Category.findOne({
+      where: { category_name: name.trim() },
     });
 
     if (existingCategory) {
@@ -54,18 +53,16 @@ export async function createCategory(data) {
       };
     }
 
-    const category = await Categories.create({
-      name: name.trim(),
-      description: description?.trim() || null,
-      urgencyId: urgencyId || null,
+    const category = await Category.create({
+      category_name: name.trim(),
+      urgency_id: urgencyId || null,
     });
 
     // Fetch the created category with Urgency association
-    const newCategory = await Categories.findByPk(category.id, {
+    const newCategory = await Category.findByPk(category.category_id, {
       include: [
         {
           model: Urgency,
-          as: "urgency",
           attributes: ["urgency_id", "urgency_name"],
         },
       ],
@@ -86,7 +83,7 @@ export async function createCategory(data) {
 
 export async function updateCategory(id, data) {
   try {
-    const category = await Categories.findByPk(id);
+    const category = await Category.findByPk(id);
 
     if (!category) {
       return { success: false, message: "Category not found" };
@@ -98,9 +95,9 @@ export async function updateCategory(id, data) {
       return { success: false, message: "Category name cannot be empty" };
     }
 
-    if (name && name.trim() !== category.name) {
-      const existingCategory = await Categories.findOne({
-        where: { name: name.trim() },
+    if (name && name.trim() !== category.category_name) {
+      const existingCategory = await Category.findOne({
+        where: { category_name: name.trim() },
       });
 
       if (existingCategory) {
@@ -112,20 +109,15 @@ export async function updateCategory(id, data) {
     }
 
     await category.update({
-      name: name ? name.trim() : category.name,
-      description:
-        description !== undefined
-          ? description?.trim() || null
-          : category.description,
-      urgencyId: urgencyId !== undefined ? urgencyId : category.urgencyId,
+      category_name: name ? name.trim() : category.category_name,
+      urgency_id: urgencyId !== undefined ? urgencyId : category.urgency_id,
     });
 
     // Fetch updated category with association
-    const updatedCategory = await Categories.findByPk(category.id, {
+    const updatedCategory = await Category.findByPk(category.category_id, {
       include: [
         {
           model: Urgency,
-          as: "urgency",
           attributes: ["urgency_id", "urgency_name"],
         },
       ],
@@ -146,7 +138,7 @@ export async function updateCategory(id, data) {
 
 export async function deleteCategory(id) {
   try {
-    const category = await Categories.findByPk(id);
+    const category = await Category.findByPk(id);
 
     if (!category) {
       return { success: false, message: "Category not found" };

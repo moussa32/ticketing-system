@@ -50,20 +50,20 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
               </TableRow>
             ) : (
               categories.map((category) => {
-                const urgencyName = category.urgency
-                  ? category.urgency.urgency_name
+                const urgencyName = category.Urgency
+                  ? category.Urgency.urgency_name
                   : "Unknown";
                 const urgencyBadge = getUrgencyBadge(urgencyName);
                 return (
                   <TableRow
-                    key={category.id}
+                    key={category.category_id}
                     className="hover:bg-gray-50 border-b border-gray-100 last:border-0"
                   >
                     <TableCell className="font-mono text-gray-500 pl-6">
-                      #{category.id}
+                      #{category.category_id}
                     </TableCell>
                     <TableCell className="font-medium text-gray-900">
-                      {category.name}
+                      {category.category_name}
                     </TableCell>
                     <TableCell className="text-gray-500">
                       {category.description || "-"}
@@ -75,9 +75,7 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
                         {urgencyBadge.label}
                       </span>
                     </TableCell>
-                    <TableCell className="text-sm text-gray-500">
-                      {new Date(category.createdAt).toLocaleDateString()}
-                    </TableCell>
+                    <TableCell className="text-sm text-gray-500">-</TableCell>
                     <TableCell className="text-right pr-6">
                       <div className="flex items-center justify-end gap-2">
                         <Button
@@ -91,7 +89,7 @@ export default function CategoriesTable({ categories, onEdit, onDelete }) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => onDelete(category.id)}
+                          onClick={() => onDelete(category.category_id)}
                           className="h-8 w-8 text-gray-500 hover:text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="w-4 h-4" />

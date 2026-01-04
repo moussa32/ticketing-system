@@ -1,13 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Plus } from 'lucide-react';
-import CategoriesTable from '../components/CategoriesTable';
-import AddCategoryModal from './AddCategoryModal';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { createCategory, updateCategory, deleteCategory } from '../actions/categoryActions';
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import CategoriesTable from "../components/CategoriesTable";
+import AddCategoryModal from "./AddCategoryModal";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "../actions/categoryActions";
 
 export default function CategoriesClient({ initialCategories }) {
   const [categories, setCategories] = useState(initialCategories);
@@ -30,10 +34,10 @@ export default function CategoriesClient({ initialCategories }) {
     setIsLoading(true);
     try {
       let result;
-      
+
       if (editingCategory) {
         // Update existing category
-        result = await updateCategory(editingCategory.id, data);
+        result = await updateCategory(editingCategory.category_id, data);
       } else {
         // Create new category
         result = await createCategory(data);
@@ -41,16 +45,20 @@ export default function CategoriesClient({ initialCategories }) {
 
       if (result.success) {
         toast.success(result.message);
-        
+
         // Optimistic update
         if (editingCategory) {
-          setCategories(categories.map(cat => 
-            cat.id === editingCategory.id ? result.data : cat
-          ));
+          setCategories(
+            categories.map((cat) =>
+              cat.category_id === editingCategory.category_id
+                ? result.data
+                : cat
+            )
+          );
         } else {
           setCategories([result.data, ...categories]);
         }
-        
+
         setIsModalOpen(false);
         router.refresh();
       } else {
@@ -58,8 +66,8 @@ export default function CategoriesClient({ initialCategories }) {
         throw new Error(result.message);
       }
     } catch (error) {
-      console.error('Error saving category:', error);
-      toast.error(error.message || 'Failed to save category');
+      console.error("Error saving category:", error);
+      toast.error(error.message || "Failed to save category");
       throw error;
     } finally {
       setIsLoading(false);
@@ -67,7 +75,7 @@ export default function CategoriesClient({ initialCategories }) {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this category?')) {
+    if (!confirm("Are you sure you want to delete this category?")) {
       return;
     }
 
@@ -76,17 +84,17 @@ export default function CategoriesClient({ initialCategories }) {
 
       if (result.success) {
         toast.success(result.message);
-        
+
         // Optimistic update
-        setCategories(categories.filter(cat => cat.id !== id));
-        
+        setCategories(categories.filter((cat) => cat.category_id !== id));
+
         router.refresh();
       } else {
         toast.error(result.message);
       }
     } catch (error) {
-      console.error('Error deleting category:', error);
-      toast.error('Failed to delete category');
+      console.error("Error deleting category:", error);
+      toast.error("Failed to delete category");
     }
   };
 

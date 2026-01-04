@@ -18,12 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function EditUserModal({ isOpen, onClose, user, onSave }) {
-  const getRoleFromId = (roleId) => {
-    const roleMap = { 1: "admin", 2: "agent", 3: "customer" };
-    return roleMap[roleId] || "customer";
-  };
-
+export default function CreateUserModal({ isOpen, onClose, onCreate }) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -36,20 +31,20 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Update form data when user prop changes
+  // Reset form when modal opens
   useEffect(() => {
-    if (user) {
+    if (isOpen) {
       setFormData({
-        firstName: user.first_name || "",
-        lastName: user.last_name || "",
-        email: user.email || "",
-        role: getRoleFromId(user.role_id),
+        firstName: "",
+        lastName: "",
+        email: "",
+        role: "customer",
         password: "",
-        isActive: user.status === "Active",
+        isActive: true,
       });
       setError("");
     }
-  }, [user]);
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -71,28 +66,38 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
     setIsLoading(true);
     setError("");
 
+    // Validate required fields
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password
+    ) {
+      setError("Please fill in all required fields");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const result = await onSave(user.user_id, formData);
+      const result = await onCreate(formData);
       if (result?.success) {
         onClose();
       } else {
-        setError(result?.message || "Failed to update user");
+        setError(result?.message || "Failed to create user");
       }
     } catch (error) {
-      console.error("Error saving user:", error);
-      setError("An error occurred while saving the user");
+      console.error("Error creating user:", error);
+      setError("An error occurred while creating the user");
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (!user) return null;
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Edit User</DialogTitle>
+          <DialogTitle>Create New User</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
@@ -100,9 +105,10 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
               {error}
             </div>
           )}
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="firstName">First Name *</Label>
               <Input
                 id="firstName"
                 name="firstName"
@@ -113,7 +119,7 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
+              <Label htmlFor="lastName">Last Name *</Label>
               <Input
                 id="lastName"
                 name="lastName"
@@ -125,13 +131,26 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email *</Label>
             <Input
               id="email"
               name="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="password">Password *</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="••••••••"
               required
             />
           </div>
@@ -150,30 +169,16 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">
-              New Password (leave blank to keep current)
-            </Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-            />
-          </div>
-
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
               name="isActive"
-              id="isActive"
+              id="createIsActive"
               checked={formData.isActive}
               onChange={handleChange}
               className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
             />
-            <Label htmlFor="isActive" className="cursor-pointer">
+            <Label htmlFor="createIsActive" className="cursor-pointer">
               Active User
             </Label>
           </div>
@@ -183,7 +188,7 @@ export default function EditUserModal({ isOpen, onClose, user, onSave }) {
               Cancel
             </Button>
             <Button type="submit" variant="default" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
+              {isLoading ? "Creating..." : "Create User"}
             </Button>
           </div>
         </form>

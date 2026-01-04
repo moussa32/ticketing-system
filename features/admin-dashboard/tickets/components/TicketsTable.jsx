@@ -80,16 +80,16 @@ export default function TicketsTable({ tickets }) {
             ) : (
               tickets.map((ticket) => (
                 <TableRow
-                  key={ticket.id}
+                  key={ticket.ticket_id}
                   className="hover:bg-gray-50 border-b border-gray-100 last:border-0"
                 >
                   <TableCell className="font-mono text-gray-500 pl-6">
-                    #{ticket.id}
+                    #{ticket.ticket_id}
                   </TableCell>
                   <TableCell>
                     <div className="max-w-xs">
                       <p className="font-medium text-gray-900 truncate">
-                        {ticket.title}
+                        {ticket.subject}
                       </p>
                       {ticket.description && (
                         <p className="text-sm text-gray-500 truncate">
@@ -100,54 +100,42 @@ export default function TicketsTable({ tickets }) {
                   </TableCell>
                   <TableCell>{getStatusBadge(ticket.status)}</TableCell>
                   <TableCell>
-                    {ticket.category ? (
+                    {ticket.Category ? (
                       <Badge variant="outline" className="font-normal">
-                        {ticket.category.name}
+                        {ticket.Category.category_name}
                       </Badge>
                     ) : (
                       <span className="text-gray-400 italic text-sm">-</span>
                     )}
                   </TableCell>
                   <TableCell>
-                    {ticket.category &&
-                      ticket.category.urgency &&
-                      getPriorityBadge(ticket.category.urgency.urgency_name)}
+                    {ticket.Urgency &&
+                      getPriorityBadge(ticket.Urgency.urgency_name)}
                   </TableCell>
                   <TableCell>
-                    {ticket.assignedAgent ? (
+                    <span className="text-sm text-gray-400 italic">-</span>
+                  </TableCell>
+                  <TableCell>
+                    {ticket.User ? (
                       <div className="flex items-center gap-2">
                         <Avatar className="w-6 h-6">
-                          <AvatarFallback className="bg-blue-100 text-blue-700 text-xs">
-                            {ticket.assignedAgent.firstName[0]}
-                            {ticket.assignedAgent.lastName[0]}
+                          <AvatarFallback className="bg-purple-100 text-purple-700 text-xs">
+                            {ticket.User.first_name?.[0]}
+                            {ticket.User.last_name?.[0]}
                           </AvatarFallback>
                         </Avatar>
                         <span className="text-sm text-gray-700">
-                          {ticket.assignedAgent.firstName}{" "}
-                          {ticket.assignedAgent.lastName}
+                          {ticket.User.first_name} {ticket.User.last_name}
                         </span>
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-400 italic">
-                        Unassigned
-                      </span>
+                      <span className="text-sm text-gray-400 italic">-</span>
                     )}
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="w-6 h-6">
-                        <AvatarFallback className="bg-purple-100 text-purple-700 text-xs">
-                          {ticket.user.firstName[0]}
-                          {ticket.user.lastName[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm text-gray-700">
-                        {ticket.user.firstName} {ticket.user.lastName}
-                      </span>
-                    </div>
-                  </TableCell>
                   <TableCell className="text-sm text-gray-500">
-                    {new Date(ticket.createdAt).toLocaleDateString()}
+                    {ticket.created_at
+                      ? new Date(ticket.created_at).toLocaleDateString()
+                      : "-"}
                   </TableCell>
                 </TableRow>
               ))

@@ -69,10 +69,10 @@ export default function AddCategoryModal({
   useEffect(() => {
     if (initialData) {
       setFormData({
-        name: initialData.name || "",
+        name: initialData.category_name || "",
         description: initialData.description || "",
-        urgencyId: initialData.urgencyId
-          ? initialData.urgencyId.toString()
+        urgencyId: initialData.urgency_id
+          ? initialData.urgency_id.toString()
           : urgencies.length > 0
           ? urgencies[0].urgency_id.toString()
           : "",

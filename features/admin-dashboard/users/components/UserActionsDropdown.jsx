@@ -5,11 +5,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical, Pencil, Key } from "lucide-react";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 
-export default function UserActionsDropdown({ user, onEdit, onResetPassword }) {
+export default function UserActionsDropdown({ user, onEdit, onDelete }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,9 +23,13 @@ export default function UserActionsDropdown({ user, onEdit, onResetPassword }) {
           <Pencil className="w-4 h-4 mr-2" />
           Edit User
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onResetPassword(user)}>
-          <Key className="w-4 h-4 mr-2" />
-          Reset Password
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => onDelete(user)}
+          className="text-red-600 focus:text-red-600 focus:bg-red-50"
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Delete User
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
