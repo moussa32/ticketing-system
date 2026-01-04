@@ -1,13 +1,12 @@
 "use server";
 
-import { Users,Role } from "@/lib/database";
+import { Users, Role } from "@/lib/database";
 import { Op } from "sequelize";
-
 
 export async function getAllUsers() {
   try {
     const users = await Users.findAll({
-    include: [
+      include: [
         {
           model: Role,
           attributes: ["role_id", "role_name"],
@@ -18,6 +17,47 @@ export async function getAllUsers() {
   } catch (error) {
     console.error("Error fetching users:", error);
     return [];
+  }
+}
+
+export async function getRoles() {
+  try {
+    const roles = await Role.findAll();
+    return JSON.parse(JSON.stringify(roles));
+  } catch (error) {
+    console.error("Error fetching roles:", error);
+    return [];
+  }
+}
+
+export async function createUser(userData) {
+  try {
+    // Check if email already exists
+    const existingUser = await Users.findOne({
+      where: { email: userData.email },
+    });
+    if (existingUser) {
+      return { success: false, message: "Email already exists" };
+    }
+
+    const newUser = await Users.create({
+      first_name: userData.firstName,
+      last_name: userData.lastName,
+      email: userData.email,
+      password: userData.password, // TODO: Hash password
+      role_id: userData.roleId,
+      status: userData.status || "Active",
+      is_temp_pass: "N",
+    });
+
+    return {
+      success: true,
+      message: "User created successfully",
+      user: JSON.parse(JSON.stringify(newUser)),
+    };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return { success: false, message: error.message };
   }
 }
 
