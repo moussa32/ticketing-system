@@ -30,15 +30,6 @@ export default function UsersTable({ users = [], roles = [] }) {
     setIsEditModalOpen(true);
   };
 
-  const handleResetPassword = async (user) => {
-    if (confirm(`Reset password for ${user.first_name} ${user.last_name}?`)) {
-      // TODO: Implement reset password logic
-      alert(
-        "Password reset functionality will be implemented with server actions"
-      );
-    }
-  };
-
   const handleAddUser = async (formData) => {
     const result = await createUser(formData);
     if (result.success) {
@@ -149,11 +140,7 @@ export default function UsersTable({ users = [], roles = [] }) {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right pr-6">
-                      <UserActionsDropdown
-                        user={user}
-                        onEdit={handleEdit}
-                        onResetPassword={handleResetPassword}
-                      />
+                      <UserActionsDropdown user={user} onEdit={handleEdit} />
                     </TableCell>
                   </TableRow>
                 ))
