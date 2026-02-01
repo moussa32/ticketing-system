@@ -2,6 +2,7 @@
 
 import { Users, Role } from "@/lib/database";
 import { Op } from "sequelize";
+import bcrypt from "bcrypt";
 
 export async function getAllUsers() {
   try {
@@ -70,17 +71,23 @@ export async function updateUser(userId, userData) {
     }
 
     const updateData = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
+      first_name: userData.firstName,
+      last_name: userData.lastName,
       email: userData.email,
-      role: userData.role,
-      isActive: userData.isActive,
+      role_id: userData.roleId,
+      status: userData.isActive ? "Active" : "Inactive",
     };
 
     // Only update password if provided
     if (userData.password && userData.password.trim() !== "") {
-      // TODO: Hash password before saving
-      updateData.password = userData.password;
+      if (userData.password.length < 6) {
+        return {
+          success: false,
+          message: "Password must be at least 6 characters long",
+        };
+      }
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      updateData.password = hashedPassword;
     }
 
     await user.update(updateData);

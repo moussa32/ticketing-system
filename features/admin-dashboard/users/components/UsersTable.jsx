@@ -16,7 +16,7 @@ import { Plus } from "lucide-react";
 import UserActionsDropdown from "./UserActionsDropdown";
 import EditUserModal from "./EditUserModal";
 import AddUserModal from "./AddUserModal";
-import { createUser } from "../actions/userActions";
+import { createUser, updateUser } from "../actions/userActions";
 import { useRouter } from "next/navigation";
 
 export default function UsersTable({ users = [], roles = [] }) {
@@ -39,12 +39,11 @@ export default function UsersTable({ users = [], roles = [] }) {
   };
 
   const handleSaveUser = async (userId, formData) => {
-    // TODO: Implement save user logic with server actions
-    console.log("Saving user:", userId, formData);
-    alert("Save user functionality will be implemented with server actions");
-    /*if (onUserUpdate) {
-      onUserUpdate();
-    }*/
+    const result = await updateUser(userId, formData);
+    if (result.success) {
+      router.refresh();
+    }
+    return result;
   };
 
   const getRoleBadge = (roleName) => {
